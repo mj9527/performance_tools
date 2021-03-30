@@ -1,9 +1,6 @@
 # coding=utf-8
 import subprocess
 import datetime
-# import json
-# import xmltodict
-# import xml.etree.ElementTree as ET
 import os
 import sys
 sys.path.append("..")
@@ -59,33 +56,34 @@ def record(uuid, pid, template, interval, file_name):
     return 0
 
 
-def record_ios_with_config():
-    output_dir = setting.ios_output_dir
+def get_work_dir_and_prefix(output_dir):
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
     output_dir = output_dir + current_time + '/'
     mkdir(output_dir)
-    trace_file = output_dir + current_time + '.trace'
+    prefix = output_dir + current_time
+    return output_dir, prefix
+
+
+def record_ios_with_config():
+    output_dir, prefix = get_work_dir_and_prefix(setting.ios_output_dir)
+    trace_file = prefix + '.trace'
     sync_cmd = r'frida-ps -Ua'
     pid = get_pid(sync_cmd, setting.ios_app_bundle_id)
     ret = record(setting.ios_uuid, pid, setting.template, setting.run_time * 1000, trace_file)
-    if ret != 0:
-        return
+    return trace_file, prefix, ret
+
 
 
 def record_mac_with_config():
-    output_dir = setting.mac_output_dir
-    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
-    output_dir = output_dir + current_time + '/'
-    mkdir(output_dir)
-    trace_file = output_dir + current_time + '.trace'
+    output_dir, prefix  = get_work_dir_and_prefix(setting.mac_output_dir)
+    trace_file = prefix + '.trace'
     sync_cmd = r'frida-ps'
     pid = get_pid(sync_cmd, setting.mac_app_bundle_id)
     ret = record(setting.mac_uuid, pid, setting.template, setting.run_time * 1000, trace_file)
-    if ret != 0:
-        return
+    return output_dir, prefix, ret
 
 
 if __name__ == "__main__":
-    record_mac_with_config()
-    #record_ios_with_config()
+    #record_mac_with_config()
+    record_ios_with_config()
 

@@ -24,10 +24,8 @@ def mkdir(path):
         return False
 
 
-def get_pid(bundle_id):
+def get_pid(sync_cmd, bundle_id):
     print ('start get pid')
-    sync_cmd = r'frida-ps -Ua'
-
     child = subprocess.Popen(sync_cmd, shell=True, stdout=subprocess.PIPE)
     stdout, stderr = child.communicate()
     # print ('start parse')
@@ -42,8 +40,7 @@ def get_pid(bundle_id):
     return 0
 
 
-def record(uuid, bundle_id, template, interval, file_name):
-    pid = get_pid(bundle_id)
+def record(uuid, pid, template, interval, file_name):
     if pid == 0:
         print ('failed to get process id')
         return 1
@@ -62,17 +59,33 @@ def record(uuid, bundle_id, template, interval, file_name):
     return 0
 
 
-def run_instrument_with_config():
-    output_dir = setting.output_dir
+def record_ios_with_config():
+    output_dir = setting.ios_output_dir
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
     output_dir = output_dir + current_time + '/'
     mkdir(output_dir)
     trace_file = output_dir + current_time + '.trace'
-    ret = record(setting.ios_uuid, setting.ios_app_bundle_id, setting.template, setting.run_time * 1000, trace_file)
+    sync_cmd = r'frida-ps -Ua'
+    pid = get_pid(sync_cmd, setting.ios_app_bundle_id)
+    ret = record(setting.ios_uuid, pid, setting.template, setting.run_time * 1000, trace_file)
+    if ret != 0:
+        return
+
+
+def record_mac_with_config():
+    output_dir = setting.mac_output_dir
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
+    output_dir = output_dir + current_time + '/'
+    mkdir(output_dir)
+    trace_file = output_dir + current_time + '.trace'
+    sync_cmd = r'frida-ps'
+    pid = get_pid(sync_cmd, setting.mac_app_bundle_id)
+    ret = record(setting.mac_uuid, pid, setting.template, setting.run_time * 1000, trace_file)
     if ret != 0:
         return
 
 
 if __name__ == "__main__":
-    run_instrument_with_config()
+    record_mac_with_config()
+    #record_ios_with_config()
 

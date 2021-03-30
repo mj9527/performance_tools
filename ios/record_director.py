@@ -2,6 +2,9 @@
 import record_apple
 import content_parser
 import stack_parser
+import sys
+sys.path.append("..")
+import flame_graph
 
 
 def get_time_file(file_list):
@@ -22,9 +25,14 @@ def start():
     time_file = get_time_file(file_list)
     if time_file == "":
         return
-    json_name = prefix + '.json'
+    json_file = prefix + '.json'
     txt_file = prefix + '.txt'
-    stack_parser.analyse_group(time_file, json_name, txt_file)
+    stack_parser.analyse_group(time_file, json_file, txt_file)
+
+    flame_file = prefix + "_flame.html"
+    sunburst_file = prefix + "_sunburst.html"
+    flame_graph.get_sunburstgraph_from_json(json_file, sunburst_file)
+    flame_graph.get_flamegrap_from_json(json_file, flame_file)
 
 
 if __name__ == "__main__":

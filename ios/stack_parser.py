@@ -1,10 +1,9 @@
 # coding=utf-8
-import subprocess
-import datetime
 import json
-import xmltodict
 import xml.etree.ElementTree as ET
-import os
+import sys
+sys.path.append("..")
+import symbol_parser
 
 
 def get_all_id(root):
@@ -281,7 +280,10 @@ def thread_tree_to_json(thread_group):
 
 def frame_tree_to_json(frame_tree, node, frame_list):
     child_frame_list = []
-    frame = {"funcname": node.func_name, "module": node.module,
+    func_name = node.func_name
+    if func_name == "":
+        func_name = node.address
+    frame = {"funcname": func_name, "module": node.module,
              "selfWeight": node.self_weight, "weight": node.all_weight, "children": child_frame_list}
     frame_list.append(frame)
 
@@ -306,15 +308,6 @@ def get_key(frame_index, address):
     return str(frame_index) + " " + str(address)
 
 
-def analyze_config():
-    output_dir = c.output_dir +'2021-03-01_20_45_42/'
-    xml_name = output_dir + '2021-03-01_20_45_42_time-profile.xml'
-    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
-    json_name = output_dir + current_time + '.json'
-    txt_file = output_dir + current_time +'.txt'
-    analyse_group(xml_name, json_name, txt_file)
-
-
 def analyse_group(xml_file, json_file, txt_file):
     tree = ET.parse(xml_file)
     root = tree.getroot()
@@ -326,12 +319,13 @@ def analyse_group(xml_file, json_file, txt_file):
     print_thread_group(thread_group, pattern)
 
     # get symbol address
-    address_symbol = ios_symbol.symbol_with_file(address_list)
+    #address_symbol = symbol_parser.symbol_with_file(address_list)
+    #address_symbol = {}
 
     # step 3
     threads = get_thread_tree(thread_group, pattern)
 
-    symbol_thread_tree(threads, address_symbol)
+    #symbol_thread_tree(threads, address_symbol)
 
     # step
     txt_tree = print_thread_tree(threads)
@@ -366,4 +360,4 @@ def symbol_frame_tree(frame_tree, node, address_symbol):
 
 
 if __name__ == "__main__":
-
+    print 'hello'

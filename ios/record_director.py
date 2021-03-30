@@ -1,41 +1,31 @@
 # coding=utf-8
 import record_apple
 import content_parser
+import stack_parser
 
 
-def export_content_with_config(trace_file, prefix):
-    content_file = export_content(trace_file, prefix)
-    schema_list = parse_content(content_file)
-
-    file_list = export_schema_list(trace_file, prefix, schema_list)
+def get_time_file(file_list):
     for file_name in file_list:
         if file_name.find('time-profile') != -1:
             print ('start analyze file ', file_name)
-            json_name = prefix + '.json'
-            txt_file = prefix + '.txt'
-            analyse_group(file_name , json_name, txt_file)
-            break
-    return schema_list
+            return file_name
+    return ""
 
 
-def run_instrument_with_config():
+def start():
     trace_file, prefix, ret = record_apple.record_ios_with_config()
     if ret != 0:
         return
 
-    content_file = content_parser.export_content(trace_file, prefix)
-    schema_list = content_parser.parse_content(content_file)
-    file_list = content_parser.export_schema_list(trace_file, prefix, schema_list)
-
-    for file_name in file_list:
-        if file_name.find('time-profile') != -1:
-            print ('start analyze file ', file_name)
-            json_name = prefix + '.json'
-            txt_file = prefix + '.txt'
-            analyse_group(file_name , json_name, txt_file)
-            break
-    return schema_list
+    print ('start parse content')
+    file_list = content_parser.get_schema_list(trace_file, prefix)
+    time_file = get_time_file(file_list)
+    if time_file == "":
+        return
+    json_name = prefix + '.json'
+    txt_file = prefix + '.txt'
+    stack_parser.analyse_group(time_file, json_name, txt_file)
 
 
 if __name__ == "__main__":
-    run_instrument_with_config()
+    start()

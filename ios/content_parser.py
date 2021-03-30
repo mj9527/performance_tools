@@ -1,7 +1,7 @@
 # coding=utf-8
 import subprocess
-import datetime
 import xml.etree.ElementTree as ET
+import time
 
 
 def export_content(trace_file, prefix):
@@ -9,12 +9,13 @@ def export_content(trace_file, prefix):
     cmd = 'xcrun xctrace export --input ' + trace_file \
           + ' --toc' \
           + ' --output ' + content_file
-    child = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
     print (cmd)
+    child = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
     return content_file
 
 
 def parse_content(content_file):
+    time.sleep(5)
     tree = ET.parse(content_file)
     root = tree.getroot()
     schema_list = []
@@ -47,6 +48,12 @@ def export_schema(trace_file, schema_name, schema_file):
     # print(stdout)
 
 
+def get_schema_list(trace_file, prefix):
+    content_file = export_content(trace_file, prefix)
+    print (content_file)
+    schema_list = parse_content(content_file)
+    file_list = export_schema_list(trace_file, prefix, schema_list)
+    return file_list
 
 
 # def analyze_content_config():

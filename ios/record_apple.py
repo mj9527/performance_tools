@@ -1,0 +1,78 @@
+# coding=utf-8
+import subprocess
+import datetime
+# import json
+# import xmltodict
+# import xml.etree.ElementTree as ET
+import os
+import sys
+sys.path.append("..")
+import setting
+
+
+def mkdir(path):
+    path = path.strip()
+    path = path.rstrip("\\")
+    isExists = os.path.exists(path)
+    if not isExists:
+        os.makedirs(path)
+        print (path+' 创建成功')
+        return True
+    else:
+        # 如果目录存在则不创建，并提示目录已存在
+        print (path+' 目录已存在')
+        return False
+
+
+def get_pid(bundle_id):
+    print ('start get pid')
+    sync_cmd = r'frida-ps -Ua'
+
+    child = subprocess.Popen(sync_cmd, shell=True, stdout=subprocess.PIPE)
+    stdout, stderr = child.communicate()
+    # print ('start parse')
+    lines = stdout.splitlines()
+    for row in lines:
+        print (row)
+        if row.find(bundle_id) != -1:
+            words = row.split()
+            pid = words[0]
+            print (pid)
+            return pid
+    return 0
+
+
+def record(uuid, bundle_id, template, interval, file_name):
+    pid = get_pid(bundle_id)
+    if pid == 0:
+        print ('failed to get process id')
+        return 1
+
+    cmd = "xcrun xctrace record --template '" + template + \
+          "' --attach " + str(pid) + \
+          " --output " + file_name + \
+          " --device " + uuid + \
+          " --time-limit " + str(interval) + "ms"
+    print (cmd)
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    for line in p.stdout.readlines():
+        print (line.decode('utf-8'))
+    p.wait()
+    p.stdout.close()
+    return 0
+
+
+def run_instrument_with_config():
+    output_dir = setting.output_dir
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
+    output_dir = output_dir + current_time + '/'
+    mkdir(output_dir)
+    trace_file = output_dir + current_time + '.trace'
+    ret = record(setting.ios_uuid, setting.ios_app_bundle_id, 'Time Profiler', setting.run_time * 1000, trace_file)
+    if ret != 0:
+        return
+
+
+if __name__ == "__main__":
+    run_instrument_with_config()
+

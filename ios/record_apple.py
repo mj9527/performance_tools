@@ -68,7 +68,7 @@ def run_instrument_with_config():
     output_dir = output_dir + current_time + '/'
     mkdir(output_dir)
     trace_file = output_dir + current_time + '.trace'
-    ret = record(setting.ios_uuid, setting.ios_app_bundle_id, 'Time Profiler', setting.run_time * 1000, trace_file)
+    ret = record(setting.ios_uuid, setting.ios_app_bundle_id, setting.template, setting.run_time * 1000, trace_file)
     if ret != 0:
         return
 

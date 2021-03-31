@@ -5,6 +5,7 @@ import stack_parser
 import sys
 sys.path.append("..")
 import flame_graph
+import setting
 
 
 def get_time_file(file_list):
@@ -16,7 +17,8 @@ def get_time_file(file_list):
 
 
 def start():
-    trace_file, prefix, ret = record_apple.record_ios_with_config()
+    #trace_file, prefix, ret = record_apple.record_ios_with_config()
+    trace_file, prefix, ret = record_apple.record_mac_with_config()
     if ret != 0:
         return
 

@@ -73,14 +73,13 @@ def record_ios_with_config():
     return trace_file, prefix, ret
 
 
-
 def record_mac_with_config():
-    output_dir, prefix  = get_work_dir_and_prefix(setting.mac_output_dir)
+    output_dir, prefix = get_work_dir_and_prefix(setting.mac_output_dir)
     trace_file = prefix + '.trace'
     sync_cmd = r'frida-ps'
     pid = get_pid(sync_cmd, setting.mac_app_bundle_id)
     ret = record(setting.mac_uuid, pid, setting.template, setting.run_time * 1000, trace_file)
-    return output_dir, prefix, ret
+    return trace_file, prefix, ret
 
 
 if __name__ == "__main__":

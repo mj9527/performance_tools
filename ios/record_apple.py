@@ -1,25 +1,10 @@
 # coding=utf-8
 import subprocess
-import datetime
 import os
 import sys
 sys.path.append("..")
 import setting
-
-
-def mkdir(path):
-    path = path.strip()
-    path = path.rstrip("\\")
-    isExists = os.path.exists(path)
-    if not isExists:
-        os.makedirs(path)
-        print (path+' 创建成功')
-        return True
-    else:
-        # 如果目录存在则不创建，并提示目录已存在
-        print (path+' 目录已存在')
-        return False
-
+import base_utils
 
 def get_pid(sync_cmd, bundle_id):
     print ('start get pid')
@@ -56,16 +41,8 @@ def record(uuid, pid, template, interval, file_name):
     return 0
 
 
-def get_work_dir_and_prefix(output_dir):
-    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
-    output_dir = output_dir + current_time + '/'
-    mkdir(output_dir)
-    prefix = output_dir + current_time
-    return output_dir, prefix
-
-
 def record_ios_with_config():
-    output_dir, prefix = get_work_dir_and_prefix(setting.ios_output_dir)
+    output_dir, prefix = base_utils.get_work_dir_and_prefix(setting.ios_output_dir)
     trace_file = prefix + '.trace'
     sync_cmd = r'frida-ps -Ua'
     pid = get_pid(sync_cmd, setting.ios_app_bundle_id)
@@ -74,7 +51,7 @@ def record_ios_with_config():
 
 
 def record_mac_with_config():
-    output_dir, prefix = get_work_dir_and_prefix(setting.mac_output_dir)
+    output_dir, prefix = base_utils.get_work_dir_and_prefix(setting.mac_output_dir)
     trace_file = prefix + '.trace'
     sync_cmd = r'frida-ps'
     pid = get_pid(sync_cmd, setting.mac_app_bundle_id)

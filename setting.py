@@ -14,4 +14,9 @@ mac_uuid = '117E51DA-23F9-59D7-88DF-90A4F3F402F4'
 mac_app_bundle_id = '腾讯会议'
 mac_output_dir = '/Users/mjzheng/Downloads/mac_data/'
 
+# windows setting
+windows_output_dir = ''
+wpt_dir = ''
+
+
 

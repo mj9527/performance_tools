@@ -1,5 +1,8 @@
 perf_data/
 .idea/
 *.pyc
+venv/
+drawtools/__pycache__/*.pyc
+
 
 

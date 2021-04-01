@@ -1,6 +1,8 @@
 # coding=utf-8
 import os
 import time
+import sys
+sys.path.append("..")
 import base_utils
 import setting
 
@@ -8,9 +10,9 @@ START_CMD_PARAM = ' -start CPU -filemode'
 
 
 def start_capture(wpr_app_path):
-    if not os.path.exists(wpr_app_path):
-        print("wpr tool not found")
-        return False
+    # if not os.path.exists(wpr_app_path):
+    #     print("wpr tool not found")
+    #     return False
     cmd = wpr_app_path + START_CMD_PARAM
     try:
         os.popen(cmd).read()
@@ -32,7 +34,8 @@ def stop_capture(wpr_app_path, etl_file):
 
 
 def record(wpt_dir, etl_file, interval):
-    wpr_app_path = wpt_dir + "\\wpr.exe"
+    wpr_app_path = "\"" + wpt_dir + "wpr.exe\""
+    print(wpr_app_path)
     ret = start_capture(wpr_app_path)
     if not ret:
         return None

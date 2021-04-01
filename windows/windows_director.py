@@ -18,8 +18,10 @@ def export_csv(wpa_exporter, etl_file, profile_file, export_dir):
         print("profile file not found")
         return False
 
-    cmd = wpa_exporter + " -i " + etl_file + " -profile " + profile_file + \
+    print(wpa_exporter)
+    cmd = "\"" + wpa_exporter + "\" -i \"" + etl_file + "\" -profile " + profile_file + \
           " -outputfolder " + export_dir + " -symbols"
+    print(cmd)
     try:
         os.popen(cmd).read()
     except Exception as e:
@@ -27,11 +29,11 @@ def export_csv(wpa_exporter, etl_file, profile_file, export_dir):
     return True
 
 
-def cap_dump_json(profile_file):
+def cap_dump_json():
     output_dir, etl_file, prefix = record_windows.record_windows_with_config()
 
-    profile_file = os.getcwd() + '/cpuusage.wpaProfile'
-    wpa_exporter = setting.wpt_dir + "\\wpaexporter.exe"
+    profile_file = os.getcwd() + '\\cpuusage.wpaProfile'
+    wpa_exporter = setting.wpt_dir + "wpaexporter.exe"
     ret = export_csv(wpa_exporter, etl_file, profile_file, output_dir)
     if not ret:
         return None
@@ -46,3 +48,13 @@ def cap_dump_json(profile_file):
     flame_graph.get_flamegrap_from_json(json_file, flame_file)
     return json_file
 
+
+if __name__ == "__main__":
+    cap_dump_json()
+    # print('hello')
+    # profile_file = os.getcwd() + '\\cpuusage.wpaProfile'
+    # wpa_exporter = setting.wpt_dir + "wpaexporter.exe"
+    # etl_file = "C:\\Users\\mjzheng\\Documents\\WPR Files\\mjzheng-PC3.03-31-2021.18-43-52.etl"
+    # output_dir = setting.windows_output_dir
+    # ret = export_csv(wpa_exporter, etl_file, profile_file, output_dir)
+    # print('hello')

@@ -15,8 +15,8 @@ mac_app_bundle_id = '腾讯会议'
 mac_output_dir = '/Users/mjzheng/Downloads/mac_data/'
 
 # windows setting
-windows_output_dir = ''
-wpt_dir = ''
+windows_output_dir = 'H:\\mj_git\\window_perf\\'
+wpt_dir = 'C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\'
 
 
 

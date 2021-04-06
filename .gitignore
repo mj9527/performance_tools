@@ -3,6 +3,8 @@ perf_data/
 *.pyc
 venv/
 drawtools/__pycache__/*.pyc
+drawtools/*.pyc
+venv27/
 
 
 

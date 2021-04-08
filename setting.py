@@ -18,5 +18,17 @@ mac_output_dir = '/Users/mjzheng/Downloads/mac_data/'
 windows_output_dir = ''
 wpt_dir = ''
 
+apple_type='ios'
+
+symbol_dict = {
+    'xnn': '',
+    'WeMeetApp': '',
+    'wemeet_app_sdk': '',
+    'WeMeet': '',
+    'xcast': '',
+    'wemeet_base': '',
+    'System': '/Users/mjzheng/Library/Developer/Xcode/iOS DeviceSupport/14.1 (18A8395)/Symbols'
+}
+
 
 

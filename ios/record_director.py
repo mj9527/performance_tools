@@ -16,9 +16,17 @@ def get_time_file(file_list):
     return ""
 
 
+def record_apple():
+    if setting.apple_type == 'ios':
+        trace_file, prefix, ret = record_apple.record_ios_with_config()
+        return trace_file, prefix, ret
+    else:
+        trace_file, prefix, ret = record_apple.record_mac_with_config()
+        return trace_file, prefix, ret
+
+
 def start():
-    #trace_file, prefix, ret = record_apple.record_ios_with_config()
-    trace_file, prefix, ret = record_apple.record_mac_with_config()
+    trace_file, prefix, ret = record_apple()
     if ret != 0:
         return
 

@@ -6,6 +6,7 @@ sys.path.append("..")
 import setting
 import base_utils
 
+
 def get_pid(sync_cmd, bundle_id):
     print ('start get pid')
     child = subprocess.Popen(sync_cmd, shell=True, stdout=subprocess.PIPE)

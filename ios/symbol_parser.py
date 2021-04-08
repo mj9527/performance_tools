@@ -1,5 +1,8 @@
 # coding=utf-8
 import subprocess
+import sys
+sys.path.append("..")
+import setting
 
 
 class ModuleInfo:
@@ -57,26 +60,24 @@ def find_module_with_address(modules, address):
     return None
 
 
-def symbol_address(module, address):
-    symbol_file = c.output_dir + '2021-03-01_20_45_42/' + 'WeMeetApp.app.dSYM/Contents/Resources/DWARF/WeMeetApp'
-    exe_path = ''
-    if module.path.find('/System/Library') != -1:
-        exe_path = "/Users/mjzheng/Library/Developer/Xcode/iOS DeviceSupport/14.1 (18A8395)/Symbols" \
-                   + module.path
-    elif module.path.find('xcast.framework') != -1:
-        exe_path = c.output_dir + '2021-03-01_20_45_42/' + 'xcast.framework.dSYM/Contents/Resources/DWARF/xcast'
-    else:
-        exe_path = symbol_file
+def get_symbol_path(module):
+    symbol_file = ''
+    for k in setting.symbol_dict:
+        if module.path.find(k) != -1:
+            symbol_file = setting.symbol_dict[k]
+            break
+    return symbol_file
 
+
+def symbol_address(module, address):
+    symbol_file = get_symbol_path(module)
     cmd = "xcrun atos -arch arm64 -l " + module.start_address + \
-          " -o '" + exe_path \
+          " -o '" + symbol_file \
           + "' " + address
-    #print (cmd)
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
     func_name = []
     if stderr != '':
-        #print ("symbole error", stderr)
         print (module.path)
         return func_name
     lines = stdout.splitlines()
@@ -120,14 +121,13 @@ def address_list_to_str(address_list):
     return str_address
 
 
-def symbol_with_file(address_list):
-    file_name = c.output_dir + '2021-03-01_20_45_42/' + '20210301204538531_ori.crash'
+def symbol_with_file(file_name, address_list):
     modules = get_module_list(file_name)
     group_address_by_module(modules, address_list)
-    dict = symbol_module_address(modules)
-    return dict
+    address_to_modules = symbol_module_address(modules)
+    return address_to_modules
 
 
 if __name__ == "__main__":
     address_list = ['0x1acedbbca']
-    symbol_with_file(address_list)
+    symbol_with_file("", address_list)

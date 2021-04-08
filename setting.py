@@ -1,7 +1,7 @@
 # coding=utf-8
 
 # public
-run_time = 8  # 测试时间单位s
+run_time = 600  # 测试时间单位s
 template = 'Time Profiler'
 
 # ios setting
@@ -15,8 +15,12 @@ mac_app_bundle_id = '腾讯会议'
 mac_output_dir = '/Users/mjzheng/Downloads/mac_data/'
 
 # windows setting
-windows_output_dir = ''
-wpt_dir = ''
+# windows_output_dir = 'H:\\mj_git\\perf_data\\'
+# wpt_dir = 'C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\'
+
+
+windows_output_dir = 'H:/mj_git/perf_data/'
+wpt_dir = 'C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/'
 
 apple_type='ios'
 

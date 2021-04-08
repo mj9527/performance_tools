@@ -16,8 +16,9 @@ def get_time_file(file_list):
     return ""
 
 
-def record_apple():
+def record_apple_config():
     if setting.apple_type == 'ios':
+        print ('record ios')
         trace_file, prefix, ret = record_apple.record_ios_with_config()
         return trace_file, prefix, ret
     else:
@@ -26,15 +27,21 @@ def record_apple():
 
 
 def start():
-    trace_file, prefix, ret = record_apple()
-    if ret != 0:
-        return
-
-    print ('start parse content')
-    file_list = content_parser.get_schema_list(trace_file, prefix)
-    time_file = get_time_file(file_list)
-    if time_file == "":
-        return
+    # trace_file, prefix, ret = record_apple_config()
+    # if ret != 0:
+    #     return
+    #
+    # print (trace_file)
+    # print (prefix)
+    #
+    # print ('start parse content')
+    # file_list = content_parser.get_schema_list(trace_file, prefix)
+    # time_file = get_time_file(file_list)
+    # if time_file == "":
+    #     return
+    # print (time_file)
+    time_file = '/Users/mjzheng/Downloads/ios_data/2021-04-08_17_23_22/2021-04-08_17_23_22_time-profile.xml'
+    prefix = '/Users/mjzheng/Downloads/ios_data/2021-04-08_17_23_22/2021-04-08_17_23_22'
     json_file = prefix + '.json'
     txt_file = prefix + '.txt'
     stack_parser.analyse_group(time_file, json_file, txt_file)

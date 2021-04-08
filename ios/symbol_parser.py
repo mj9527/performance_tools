@@ -3,6 +3,7 @@ import subprocess
 import sys
 sys.path.append("..")
 import setting
+import os
 
 
 class ModuleInfo:
@@ -13,6 +14,7 @@ class ModuleInfo:
         arch = ""
         path = ""
         ls = []
+        symbol_file = ""
 
 
 class SymbolInfo:
@@ -60,17 +62,28 @@ def find_module_with_address(modules, address):
     return None
 
 
-def get_symbol_path(module):
+def get_symbol_path(module_path):
+    module_name = os.path.basename(module_path)
     symbol_file = ''
     for k in setting.symbol_dict:
-        if module.path.find(k) != -1:
+        if module_path.find(k) != -1:
             symbol_file = setting.symbol_dict[k]
             break
+    if module_path.find('/private/') != -1:
+        if module_path.find('Frameworks') != -1:
+            symbol_file += module_name + ".framework.dSYM/Contents/Resources/DWARF/" + module_name
+        else:
+            symbol_file += module_name + ".app.dSYM/Contents/Resources/DWARF/" + module_name
+    if module_path.find('/System/') != -1:
+        symbol_file += module_path
     return symbol_file
 
 
 def symbol_address(module, address):
-    symbol_file = get_symbol_path(module)
+    symbol_file = get_symbol_path(module.path)
+    module.symbol_file = symbol_file
+    if symbol_file == module.path:
+        return []
     cmd = "xcrun atos -arch arm64 -l " + module.start_address + \
           " -o '" + symbol_file \
           + "' " + address
@@ -78,7 +91,7 @@ def symbol_address(module, address):
     stdout, stderr = p.communicate()
     func_name = []
     if stderr != '':
-        print (module.path)
+        print ('parse error', module.symbol_file)
         return func_name
     lines = stdout.splitlines()
     for line in lines:
@@ -102,7 +115,8 @@ def symbol_module_address(modules):
         str_address = address_list_to_str(module.ls)
         func_name_list = symbol_address(module, str_address)
         if len(func_name_list) != len(module.ls):
-            print ('unmatch length ', module.name)
+            print ('unmatch length ', module.symbol_file)
+            continue
         for index, address in enumerate(module.ls):
             info = SymbolInfo()
             info.address = address

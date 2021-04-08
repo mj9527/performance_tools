@@ -319,13 +319,14 @@ def analyse_group(xml_file, json_file, txt_file):
     print_thread_group(thread_group, pattern)
 
     # get symbol address
-    #address_symbol = symbol_parser.symbol_with_file(address_list)
+    module_file = '/Users/mjzheng/Downloads/ios_data/2021-04-08_17_23_22/20210408172529188_ori.crash'
+    address_symbol = symbol_parser.symbol_with_file(module_file, address_list)
     #address_symbol = {}
 
     # step 3
     threads = get_thread_tree(thread_group, pattern)
 
-    #symbol_thread_tree(threads, address_symbol)
+    symbol_thread_tree(threads, address_symbol)
 
     # step
     txt_tree = print_thread_tree(threads)

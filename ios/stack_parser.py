@@ -28,10 +28,10 @@ def get_id_to_item(item):
 
 
 class Backtrace:
-    def __init__(self):
-        backtrace_id = 0
-        weight = 0
-        backtrace_detail = []
+    def __init__(self, backtrace_id, weight, detail):
+        self.backtrace_id = backtrace_id
+        self.weight = weight
+        self.backtrace_detail = detail
 
 
 # # 相同backtrace_id weight聚合, 并解析backtrace_id
@@ -54,12 +54,9 @@ def get_thread_to_backtrace_list(root, id_to_item):
             bt.weight += weight
             backtrace_list[backtrace_id] = bt
         else:
-            bt = Backtrace()
-            bt.backtrace_id = backtrace_id
-            bt.weight = weight
             backtrace_item = id_to_item.get(backtrace_id)
             detail = get_backtrace_detail(id_to_item, backtrace_item, address_list)
-            bt.backtrace_detail = detail
+            bt = Backtrace(backtrace_id, weight, detail)
             backtrace_list[backtrace_id] = bt
         thread_id_to_backtrace_list[thread_id] = backtrace_list
     return thread_id_to_backtrace_list, address_list
@@ -112,60 +109,33 @@ def get_id(item):
 
 
 class NodeInfo:
-    def __init__(self):
-        node = FrameInfo()
-        thread_id = 0
-        child_list = []
+    def __init__(self, thread_id, node):
+        self.node = node
+        self.thread_id = thread_id
+        self.child_list = []
 
 
 class FrameInfo:
-    def __init__(self):
-        index = 0
-        address = 0
-        self_weight = 0
-        all_weight = 0
-        func_name = ""
-        module = ""
+    def __init__(self, index, address, weight):
+        self.index = index
+        self.address = address
+        self.self_weight = weight
+        self.all_weight = weight
+        self.func_name = ""
+        self.module = ""
 
 
-def get_frame_info(index, address, key, weight):
-    frame = FrameInfo()
-    frame.index = index
-    frame.address = address
-    frame.self_weight = weight
-    frame.all_weight = weight
-    frame.func_name = ""
-    frame.module = ""
-    return frame
-
-
-def get_thread_tree(thread_group, id_to_item):
+def get_thread_tree(thread_id_to_backtrace_list, id_to_item):
     threads = []
-    for (thread_id, thread) in thread_group.items():
+    for (thread_id, backtrace_list) in thread_id_to_backtrace_list.items():
         thread_name = get_thread_name(thread_id, id_to_item)
         # if thread_name.find('pthread_start 0x18fecc') == -1:
         #     continue
         # print ('the same ....', thread_name)
-        thread_root = NodeInfo()
-        thread_root.thread_id = thread_id
-        thread_root.node = get_frame_info(0, thread_name, thread_name, 0)
-        thread_root.child_list = []
-        scan_all_backtrace(thread_root, thread)
+        thread_root = NodeInfo(thread_id, FrameInfo(0, thread_name, 0))
+        scan_all_backtrace(thread_root, backtrace_list)
         threads.append(thread_root)
     return threads
-
-
-def get_node(child_list, index, address, weight):
-    for child in child_list:
-        node = child.node
-        if node.index == index and node.address == address:
-            node.self_weight += weight
-            node.all_weight += weight
-            return child, 1
-    child = NodeInfo()
-    child.node = get_frame_info(index, address, address, weight)
-    child.child_list = []
-    return child, 0
 
 
 def scan_all_backtrace(root, thread):
@@ -180,6 +150,17 @@ def scan_all_backtrace(root, thread):
     for top_node in root.child_list:
         root.node.self_weight += top_node.node.self_weight
         root.node.all_weight += top_node.node.all_weight
+
+
+def get_node(child_list, index, address, weight):
+    for child in child_list:
+        node = child.node
+        if node.index == index and node.address == address:
+            node.self_weight += weight
+            node.all_weight += weight
+            return child, 1
+    child = NodeInfo(0, FrameInfo(index, address, weight))
+    return child, 0
 
 
 def get_thread_name(thread_id, id_to_item):

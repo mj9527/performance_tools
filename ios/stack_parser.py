@@ -144,26 +144,23 @@ def get_thread_tree(root, backtrace_list):
         address_list = backtrace.address_list
         weight = backtrace.weight
         for index, address in enumerate(address_list):
-            child, found = get_tree_node(child_list, index, address, weight)
-            if found == 0:
-                child_list.append(child)
+            child = get_child_node(child_list, index, address, weight)
             child_list = child.child_list
     for child in root.child_list:
         root.node.self_weight += child.node.self_weight
         root.node.all_weight += child.node.all_weight
 
 
-def get_tree_node(child_list, index, address, weight):
-    found = 0
+def get_child_node(child_list, index, address, weight):
     for child in child_list:
         node = child.node
         if node.index == index and node.address == address:
             node.self_weight += weight
             node.all_weight += weight
-            found = 1
-            return child, found
+            return child
     child = NodeInfo(0, FrameInfo(index, address, weight))
-    return child, found
+    child_list.append(child)
+    return child
 
 
 def get_thread_name(thread_id, id_to_item):
@@ -173,53 +170,6 @@ def get_thread_name(thread_id, id_to_item):
     if len(word_list) >= 2:
         thread_name = word_list[0] + " " + word_list[1]
     return thread_name
-
-
-def write_txt_to_file(save_path, list_data):
-    with open(save_path, "w") as f:
-        for frame_list in list_data:
-            for frame in frame_list:
-                f.write(str(frame))
-                print (frame)
-                f.write('\n')
-        f.close()
-
-
-def thread_tree_to_json(thread_group):
-    json_root = {}
-    threads = []
-    for th_info in thread_group:
-        frame_list = []
-        frame_tree_to_json(th_info, frame_list)
-        th = {"threadID": th_info.thread_id, "func": frame_list}
-        threads.append(th)
-    json_root["threads"] = threads
-    return json_root
-
-
-def frame_tree_to_json(child, frame_list):
-    child_frame_list = []
-    node = child.node
-    func_name = node.func_name
-    if func_name == "":
-        func_name = node.address
-    frame = {"funcname": func_name, "module": node.module,
-             "selfWeight": node.self_weight, "weight": node.all_weight, "children": child_frame_list}
-    frame_list.append(frame)
-
-    if not child.child_list:
-        return
-    if len(child.child_list) == 0:
-        return
-
-    for child in child.child_list:
-        frame_tree_to_json(child, child_frame_list)
-
-
-def write_json_to_file(save_path, json_data):
-    with open(save_path, "w") as f:
-        json_str = json.dumps(json_data)
-        f.write(json_str)
 
 
 def analyse_group(xml_file, json_file, txt_file):
@@ -239,40 +189,39 @@ def analyse_group(xml_file, json_file, txt_file):
         address_symbol = symbol_parser.symbol_with_file(module_file, address_list)
 
     # step 3
-    threads = get_thread_tree_list(thread_id_to_backtrace_list, id_to_item)
+    thread_tree_list = get_thread_tree_list(thread_id_to_backtrace_list, id_to_item)
 
     if setting.symbol_parse == 1:
-        symbol_thread_tree(threads, address_symbol)
+        symbol_thread_tree(thread_tree_list, address_symbol)
 
     # step
-    txt_tree = stack_printer.print_thread_tree(threads)
-    write_txt_to_file(txt_file, txt_tree)
+    txt_tree = stack_printer.get_txt_data(thread_tree_list)
+    stack_printer.write_txt_file(txt_file, txt_tree)
 
     # step 4
-    json_data = thread_tree_to_json(threads)
-    write_json_to_file(json_file, json_data)
+    json_data = stack_printer.get_json_data(thread_tree_list)
+    stack_printer.write_json_file(json_file, json_data)
     return
 
 
-def symbol_thread_tree(thread_group, address_symbol):
-    for th_info in thread_group:
-        symbol_frame_tree(th_info.frame_tree, th_info.top_node, address_symbol)
+def symbol_thread_tree(thread_tree_list, address_symbol):
+    for thread_tree in thread_tree_list:
+        symbol_frame_tree(thread_tree, address_symbol)
 
 
-def symbol_frame_tree(frame_tree, node, address_symbol):
+def symbol_frame_tree(tree_node, address_symbol):
+    node = tree_node.node
     if node.address in address_symbol:
         symbol = address_symbol[node.address]
         node.module = symbol.module_name
         node.func_name = symbol.func_name
-    if len(frame_tree) == 0:
+    if not tree_node.child_list:
         return
-    if node.key not in frame_tree:
+    if len(tree_node.child_list) == 0:
         return
-    children = frame_tree[node.key]
-    if not children:
-        return
-    for frame in children:
-        symbol_frame_tree(frame_tree, frame, address_symbol)
+
+    for child in tree_node.child_list:
+        symbol_frame_tree(child, address_symbol)
     return
 
 

@@ -13,7 +13,7 @@ def print_thread_backtrace(thread_group, id_to_item):
         thread_name = thread_item.attrib.get('fmt')
         print (thread_name)
         for (backtrace_id, bt) in thread.items():
-            detail = bt.backtrace_detail
+            detail = bt.address_list
             print (detail, bt.weight)
         print ('\n')
 

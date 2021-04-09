@@ -31,7 +31,7 @@ class Backtrace:
     def __init__(self, backtrace_id, weight, detail):
         self.backtrace_id = backtrace_id
         self.weight = weight
-        self.backtrace_detail = detail
+        self.address_list = detail
 
 
 # # 相同backtrace_id weight聚合, 并解析backtrace_id
@@ -125,42 +125,45 @@ class FrameInfo:
         self.module = ""
 
 
-def get_thread_tree(thread_id_to_backtrace_list, id_to_item):
-    threads = []
+def get_thread_tree_list(thread_id_to_backtrace_list, id_to_item):
+    thread_tree_list = []
     for (thread_id, backtrace_list) in thread_id_to_backtrace_list.items():
         thread_name = get_thread_name(thread_id, id_to_item)
         # if thread_name.find('pthread_start 0x18fecc') == -1:
         #     continue
         # print ('the same ....', thread_name)
-        thread_root = NodeInfo(thread_id, FrameInfo(0, thread_name, 0))
-        scan_all_backtrace(thread_root, backtrace_list)
-        threads.append(thread_root)
-    return threads
+        root = NodeInfo(thread_id, FrameInfo(0, thread_name, 0))
+        get_thread_tree(root, backtrace_list)
+        thread_tree_list.append(root)
+    return thread_tree_list
 
 
-def scan_all_backtrace(root, thread):
-    for (backtrace_id, bt) in thread.items():
+def get_thread_tree(root, backtrace_list):
+    for (backtrace_id, backtrace) in backtrace_list.items():
         child_list = root.child_list
-        backtrace_detail = bt.backtrace_detail
-        for index, address in enumerate(backtrace_detail):
-            child, found = get_node(child_list, index, address, bt.weight)
+        address_list = backtrace.address_list
+        weight = backtrace.weight
+        for index, address in enumerate(address_list):
+            child, found = get_tree_node(child_list, index, address, weight)
             if found == 0:
                 child_list.append(child)
             child_list = child.child_list
-    for top_node in root.child_list:
-        root.node.self_weight += top_node.node.self_weight
-        root.node.all_weight += top_node.node.all_weight
+    for child in root.child_list:
+        root.node.self_weight += child.node.self_weight
+        root.node.all_weight += child.node.all_weight
 
 
-def get_node(child_list, index, address, weight):
+def get_tree_node(child_list, index, address, weight):
+    found = 0
     for child in child_list:
         node = child.node
         if node.index == index and node.address == address:
             node.self_weight += weight
             node.all_weight += weight
-            return child, 1
+            found = 1
+            return child, found
     child = NodeInfo(0, FrameInfo(index, address, weight))
-    return child, 0
+    return child, found
 
 
 def get_thread_name(thread_id, id_to_item):
@@ -236,7 +239,7 @@ def analyse_group(xml_file, json_file, txt_file):
         address_symbol = symbol_parser.symbol_with_file(module_file, address_list)
 
     # step 3
-    threads = get_thread_tree(thread_id_to_backtrace_list, id_to_item)
+    threads = get_thread_tree_list(thread_id_to_backtrace_list, id_to_item)
 
     if setting.symbol_parse == 1:
         symbol_thread_tree(threads, address_symbol)

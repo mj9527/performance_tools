@@ -26,6 +26,12 @@ apple_type='ios'
 
 symbol_dir = '/Users/mjzheng/Library/Developer/Xcode/DerivedData/WeMeetApp-gdodaklaxocfarhhyqkxxdenrbft/Build/Products/Release-iphoneos/'
 
+#module_file = '/Users/mjzheng/Downloads/ios_data/2021-04-08_17_23_22/20210408172529188_ori.crash'
+
+module_file = '/Users/mjzheng/Downloads/ios_data/2021-04-12_10_26_28/20210412102753038_ori.crash'
+
+symbol_parse = 1
+
 symbol_dict = {
     # 'xnn': symbol_dir,
     # 'WeMeetApp': symbol_dir,
@@ -34,5 +40,8 @@ symbol_dict = {
     # 'xcast': symbol_dir,
     # 'wemeet_base': symbol_dir,
     '/private/': symbol_dir,
-    'System': '/Users/mjzheng/Library/Developer/Xcode/iOS DeviceSupport/14.1 (18A8395)/Symbols'
+    'System': '/Users/mjzheng/Library/Developer/Xcode/iOS DeviceSupport/14.1 (18A8395)/Symbols',
+    #Developer/usr/lib/libBacktraceRecording.dylib
+    #/usr/lib/system/introspection/libdispatch.dylib
+    '/usr/lib': '/Users/mjzheng/Library/Developer/Xcode/iOS DeviceSupport/14.1 (18A8395)/Symbols'
 }

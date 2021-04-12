@@ -32,13 +32,13 @@ def parse_content(content_file):
 def export_schema_list(trace_file, prefix, schema_list):
     file_list = []
     for schema_name in schema_list:
-        schema_file = prefix + '_' + schema_name + '.xml'
-        export_schema(trace_file, schema_name, schema_file)
+        schema_file = export_schema(trace_file, schema_name, prefix)
         file_list.append(schema_file)
     return file_list
 
 
-def export_schema(trace_file, schema_name, schema_file):
+def export_schema(trace_file, schema_name, prefix):
+    schema_file = prefix + '_' + schema_name + '.xml'
     cmd = 'xcrun xctrace export --input ' + trace_file \
           + ' --xpath \'/trace-toc/run[@number="1"]/data/table[@schema="' + schema_name + '"]\'' \
           + ' --output ' + schema_file
@@ -46,6 +46,7 @@ def export_schema(trace_file, schema_name, schema_file):
     print (cmd)
     stdout, stderr = child.communicate()
     # print(stdout)
+    return schema_file
 
 
 def get_schema_list(trace_file, prefix):
@@ -54,6 +55,20 @@ def get_schema_list(trace_file, prefix):
     schema_list = parse_content(content_file)
     file_list = export_schema_list(trace_file, prefix, schema_list)
     return file_list
+
+
+def get_time_file(file_list):
+    for file_name in file_list:
+        if file_name.find('time-profile') != -1:
+            print ('start analyze file ', file_name)
+            return file_name
+    return ""
+
+ # file_list = content_parser.get_schema_list(trace_file, prefix)
+ #    time_file = content_parser.get_time_file(file_list)
+ #    if time_file == "":
+ #        return
+ #    print (time_file)
 
 
 # def analyze_content_config():

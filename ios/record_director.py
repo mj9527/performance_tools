@@ -8,14 +8,6 @@ import flame_graph
 import setting
 
 
-def get_time_file(file_list):
-    for file_name in file_list:
-        if file_name.find('time-profile') != -1:
-            print ('start analyze file ', file_name)
-            return file_name
-    return ""
-
-
 def record_apple_config():
     if setting.apple_type == 'ios':
         print ('record ios')
@@ -31,15 +23,8 @@ def start():
     if ret != 0:
         return
 
-    print (trace_file)
-    print (prefix)
-
-    print ('start parse content')
-    file_list = content_parser.get_schema_list(trace_file, prefix)
-    time_file = get_time_file(file_list)
-    if time_file == "":
-        return
-    print (time_file)
+    print ('start parse content ', trace_file)
+    time_file = content_parser.export_schema(trace_file, 'time-profile', prefix)
 
     # time_file = '/Users/mjzheng/Downloads/ios_data/2021-04-08_17_23_22/2021-04-08_17_23_22_time-profile.xml'
     # prefix = '/Users/mjzheng/Downloads/ios_data/2021-04-08_17_23_22/2021-04-08_17_23_22'

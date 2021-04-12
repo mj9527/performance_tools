@@ -44,27 +44,35 @@ def record(uuid, pid, template, interval, file_name):
     return 0
 
 
-def record_ios_with_config():
-    output_dir, prefix = base_utils.get_work_dir_and_prefix(setting.ios_output_dir)
+def record_ios_with_config(prefix):
     trace_file = prefix + '.trace'
     sync_cmd = r'frida-ps -Ua'
     pid = get_pid(sync_cmd, setting.ios_app_bundle_id)
     ret = record(setting.ios_uuid, pid, setting.template, setting.run_time * 1000, trace_file)
     module_file = prefix + '.log'
     record_modules.export_module_to_file(pid, module_file)
-    return trace_file, prefix, ret
+    return trace_file, ret
 
 
-def record_mac_with_config():
-    output_dir, prefix = base_utils.get_work_dir_and_prefix(setting.mac_output_dir)
+def record_mac_with_config(prefix):
     trace_file = prefix + '.trace'
     sync_cmd = r'frida-ps'
     pid = get_pid(sync_cmd, setting.mac_app_bundle_id)
     ret = record(setting.mac_uuid, pid, setting.template, setting.run_time * 1000, trace_file)
-    return trace_file, prefix, ret
+    return trace_file, ret
+
+
+def record_apple_config(prefix):
+    if setting.apple_type == 'ios':
+        print ('record ios')
+        trace_file, ret = record_ios_with_config(prefix)
+        return trace_file, ret
+    else:
+        trace_file, ret = record_mac_with_config(prefix)
+        return trace_file, ret
 
 
 if __name__ == "__main__":
-    #record_mac_with_config()
-    record_ios_with_config()
+    output_dir, prefix = base_utils.get_work_dir_and_prefix_with_config()
+    record_ios_with_config(prefix)
 

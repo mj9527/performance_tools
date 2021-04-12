@@ -172,7 +172,7 @@ def get_thread_name(thread_id, id_to_item):
     return thread_name
 
 
-def analyse_group(xml_file, json_file, txt_file, module_file):
+def analyse_group(xml_file, prefix):
     tree = ET.parse(xml_file)
     root = tree.getroot()
     # step 1
@@ -184,6 +184,8 @@ def analyse_group(xml_file, json_file, txt_file, module_file):
 
     # get symbol address
     address_symbol = {}
+
+    module_file = prefix + '.log'
     if setting.symbol_parse == 1:
         address_symbol = symbol_parser.symbol_with_file(module_file, address_list)
 
@@ -194,13 +196,15 @@ def analyse_group(xml_file, json_file, txt_file, module_file):
         symbol_thread_tree(thread_tree_list, address_symbol)
 
     # step
+    txt_file = prefix + '.txt'
     txt_tree = stack_printer.get_txt_data(thread_tree_list)
     stack_printer.write_txt_file(txt_file, txt_tree)
 
     # step 4
+    json_file = prefix + '.json'
     json_data = stack_printer.get_json_data(thread_tree_list)
     stack_printer.write_json_file(json_file, json_data)
-    return
+    return json_file
 
 
 def symbol_thread_tree(thread_tree_list, address_symbol):

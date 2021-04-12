@@ -76,6 +76,9 @@ def get_symbol_path(module_path):
             symbol_file += module_name + ".app.dSYM/Contents/Resources/DWARF/" + module_name
     if module_path.find('/System/') != -1:
         symbol_file += module_path
+
+    if module_path.find('/usr/lib') != -1:
+        symbol_file+=module_path
     return symbol_file
 
 

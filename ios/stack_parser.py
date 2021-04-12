@@ -172,7 +172,7 @@ def get_thread_name(thread_id, id_to_item):
     return thread_name
 
 
-def analyse_group(xml_file, json_file, txt_file):
+def analyse_group(xml_file, json_file, txt_file, module_file):
     tree = ET.parse(xml_file)
     root = tree.getroot()
     # step 1
@@ -185,7 +185,6 @@ def analyse_group(xml_file, json_file, txt_file):
     # get symbol address
     address_symbol = {}
     if setting.symbol_parse == 1:
-        module_file = '/Users/mjzheng/Downloads/ios_data/2021-04-08_17_23_22/20210408172529188_ori.crash'
         address_symbol = symbol_parser.symbol_with_file(module_file, address_list)
 
     # step 3

@@ -5,6 +5,7 @@ import sys
 sys.path.append("..")
 import setting
 import base_utils
+import record_modules
 
 
 def get_pid(sync_cmd, bundle_id):
@@ -49,6 +50,8 @@ def record_ios_with_config():
     sync_cmd = r'frida-ps -Ua'
     pid = get_pid(sync_cmd, setting.ios_app_bundle_id)
     ret = record(setting.ios_uuid, pid, setting.template, setting.run_time * 1000, trace_file)
+    module_file = prefix + '.log'
+    record_modules.export_module_to_file(pid, module_file)
     return trace_file, prefix, ret
 
 

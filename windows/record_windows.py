@@ -48,7 +48,7 @@ def export_csv(wpt_dir, etl_file, output_dir):
 
 
 def record_windows_with_config():
-    output_dir, prefix = base_utils.get_work_dir_and_prefix(setting.windows_output_dir)
+    output_dir, prefix = base_utils.get_work_dir_and_prefix_with_config()
     etl_file = prefix + '.etl'
     record(setting.wpt_dir, etl_file, setting.run_time)
     return output_dir, etl_file, prefix

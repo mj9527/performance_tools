@@ -30,7 +30,11 @@ def get_work_dir_and_prefix_with_config():
     origin_dir = ''
     if setting.os_type == 'ios':
         origin_dir = setting.ios_output_dir
-    else:
+    elif setting.os_type == 'osx':
         origin_dir = setting.mac_output_dir
+    elif setting.os_type == 'windows':
+        origin_dir = setting.windows_output_dir
+    else:
+        origin_dir = ''
     output_dir, prefix = get_work_dir_and_prefix(origin_dir)
     return output_dir, prefix

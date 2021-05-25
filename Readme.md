@@ -13,3 +13,13 @@
 
 ## 电量
 ./record_apple.sh  'Energy Log' 6daac09469e94a24a2fa1f684bcd57963fd29c25 5651 600s
+
+
+# 通用配置
+os_type : 设置捕获操作系统类型
+run_time : 采集时间
+
+# windows 性能生成工具
+1. windows_output_dir，设置捕获文件输出目录
+2. wpt_dir, 设置wpt安装目录
+3. 运行python windows_director.py

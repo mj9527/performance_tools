@@ -1,6 +1,7 @@
 # coding=utf-8
 import datetime
 import os
+import setting
 
 
 def mkdir(path):
@@ -22,4 +23,14 @@ def get_work_dir_and_prefix(output_dir):
     output_dir = output_dir + current_time + '/'
     mkdir(output_dir)
     prefix = output_dir + current_time
+    return output_dir, prefix
+
+
+def get_work_dir_and_prefix_with_config():
+    origin_dir = ''
+    if setting.os_type == 'ios':
+        origin_dir = setting.ios_output_dir
+    else:
+        origin_dir = setting.mac_output_dir
+    output_dir, prefix = get_work_dir_and_prefix(origin_dir)
     return output_dir, prefix

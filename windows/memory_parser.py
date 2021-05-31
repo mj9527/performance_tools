@@ -19,21 +19,42 @@ class ThreadStack:
         self.frames = []
 
 
-def parse_stack(thread_stack):
-    print ('begin stack--------')
-    print (thread_stack.first_line)
-    print (thread_stack.second_line)
+def get_moudle_name(frame):
+    index = frame.find('!')
+    if index != -1:
+        name = frame[0:index]
+        return name
+    return ""
+
+
+# def get_all_module_list(frames, module_list):
+#     for frame in frames:
+#         name = get_moudle_name(frame)
+#         if name not in module_list:
+#             module_list.append(name)
+
+
+def parse_stack(thread_stack, module_list):
+    #print ('begin stack--------')
     words = thread_stack.first_line.split()
     alloc_size = int(words[1])
     print ("alloc size ", alloc_size)
+    #get_all_module_list(thread_stack.frames, module_list)
     for frame in thread_stack.frames:
-        print (frame)
-    print ('end stack--------')
+        name = get_moudle_name(frame)
+        if name not in module_list:
+            module_list.append(name)
+    #print ('end stack--------')
 
 
 def scan_stack_list(stack_list):
-    for thread_statck in stack_list:
-        parse_stack(thread_statck)
+    module_list = []
+    for thread_stack in stack_list:
+        parse_stack(thread_stack, module_list)
+
+    for module in module_list:
+        print (module)
+   # print (module_list)
 
 
 def parse_memory(file_name):
@@ -73,5 +94,5 @@ def parse_memory(file_name):
 
 
 if __name__ == "__main__":
-    file_name = '/Users/mjzheng/Downloads/memory/6_5.txt'
+    file_name = '/Users/mjzheng/Downloads/memory/diff.txt'
     parse_memory(file_name)

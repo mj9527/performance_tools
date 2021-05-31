@@ -1,9 +1,9 @@
 # coding=utf-8
 
 # public
-run_time = 10  # 测试时间单位s
-os_type = 'ios'
-#os_type = 'osx'
+run_time = 60  # 测试时间单位s
+#os_type = 'ios'
+os_type = 'osx'
 #os_type = 'windows'
 
 # apple public
@@ -42,5 +42,8 @@ mac_output_dir = '/Users/mjzheng/Downloads/mac_data/'
 # wpt_dir = 'C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\'
 windows_output_dir = 'H:/mj_git/perf_data/'
 wpt_dir = 'C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/'
+
+#memory setting
+module_list = ['wemeet_app_sdk', 'wemeet', 'wemeet_framework_common', 'wemeetapp', 'imsdk']
 
 

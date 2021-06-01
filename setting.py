@@ -44,6 +44,8 @@ windows_output_dir = 'H:/mj_git/perf_data/'
 wpt_dir = 'C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/'
 
 #memory setting
-module_list = ['wemeet_app_sdk', 'wemeet', 'wemeet_framework_common', 'wemeetapp', 'imsdk']
+business_module_list = ['wemeet_app_sdk', 'wemeet', 'wemeet_framework_common', 'wemeetapp', 'imsdk', 'xnn', 'xcast']
+base_module_list = ['GF']
+
 
 

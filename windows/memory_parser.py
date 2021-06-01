@@ -27,6 +27,7 @@ def get_moudle_name(frame):
     index = frame.find('!')
     if index != -1:
         name = frame[0:index]
+        name = name.strip()
         return name
     return ""
 
@@ -37,45 +38,38 @@ def get_moudle_name(frame):
 #         if name not in module_list:
 #             module_list.append(name)
 
-def find_str(str):
-    for item in setting.business_list:
-        if item.startswith(str):
-            print ('find....')
-
-
-def parse_stack(thread_stack, module_list):
+def parse_stack(thread_stack, global_module_list):
     #print ('begin stack--------')
     words = thread_stack.first_line.split()
     alloc_size = int(words[1])
-    print ("alloc size ", alloc_size)
-    #get_all_module_list(thread_stack.frames, module_list)
-    current_list = []
-    found = False
+    #print ("alloc size ", alloc_size)
+
+    stack_module_list = []
     for frame in thread_stack.frames:
         name = get_moudle_name(frame)
-        if name not in module_list:
-            module_list.append(name)
-        name = name.strip()
-        #print (name)
-        #find_str(name)
-        if name in setting.business_list:
-            #print ('found')
+        stack_module_list.append(name)
+        if name not in global_module_list:
+            global_module_list.append(name)
+
+    found = False
+    for module in stack_module_list:
+        if module in setting.business_list:
             found = True
             break
-        current_list.append(name)
     if not found:
-        print ('not find business module', current_list)
-
+        print ('not find business module', stack_module_list)
     #print ('end stack--------')
 
 
-def scan_stack_list(stack_list):
-    module_list = []
-    for thread_stack in stack_list:
-        parse_stack(thread_stack, module_list)
+def print_module_list(module_list):
     for module in module_list:
         print (module)
-   # print (module_list)
+
+
+def scan_stack_list(stack_list):
+    global_module_list = []
+    for thread_stack in stack_list:
+        parse_stack(thread_stack, global_module_list)
 
 
 def parse_memory(file_name):

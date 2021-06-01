@@ -5,6 +5,7 @@ import sys
 sys.path.append("..")
 import base_utils
 import setting
+import memory_ui
 
 
 class StackStatus(Enum):
@@ -117,7 +118,7 @@ def scan_stack_list(stack_list):
     #print_module_to_size(module_to_size)
     module_ls = sorted(module_to_size.items(), key=lambda kv: (kv[1], kv[0]))
     print_module_size(module_ls)
-
+    memory_ui.show_memory_dic(module_to_size, setting.output_memory_dir)
 
 
 def parse_memory(file_name):

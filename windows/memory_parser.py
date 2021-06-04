@@ -15,6 +15,8 @@ class StackStatus(Enum):
     FIRST_CRLF = 3
     FRAMES = 4
     FINISH_CRLF = 5
+    MODULE_BEGIG = 6
+    MODULE_END = 7
 
 
 class ThreadStack:
@@ -100,8 +102,11 @@ def print_module_list(module_list):
 
 
 def print_module_to_size(module_to_size):
+    total_sz = 0
     for key, value in module_to_size.items():
-        print key, ':', value
+        total_sz += value
+        #print key, ':', value
+    print 'alloc size', total_sz / 1024 /1024
 
 
 def print_module_size(module_ls):
@@ -117,7 +122,8 @@ def scan_stack_list(stack_list):
 
     #print_module_to_size(module_to_size)
     module_ls = sorted(module_to_size.items(), key=lambda kv: (kv[1], kv[0]))
-    print_module_size(module_ls)
+    #print_module_size(module_ls)
+    print_module_to_size(module_to_size)
     memory_ui.show_memory_dic(module_to_size, setting.output_memory_dir)
 
 
@@ -157,6 +163,47 @@ def parse_memory(file_name):
     scan_stack_list(stack_list)
 
 
+class ModuleInfo:
+    def __init__(self):
+        start_address = 0x0
+        end_address = 0x0
+        sz = 0;
+        name = ""
+
+
+def parse_module(file_name):
+    f = open(file_name)
+    line = f.readline()
+    status = StackStatus.INVALID
+    total_sz = 0
+    while line:
+        if status == StackStatus.INVALID:
+            if line.startswith('//'):
+                status = StackStatus.MODULE_BEGIG
+        elif status == StackStatus.MODULE_BEGIG:
+            if line.startswith('//'):
+                status = StackStatus.MODULE_END
+                break
+            if line.find('DBGHELP:') != -1:
+                words = line.split()
+                info = ModuleInfo()
+                info.name = words[2]
+                p = words[0].split('-')
+                info.start_address = p[0]
+                start = int(info.start_address, 16)
+                info.end_address = p[1]
+                end = int(info.end_address, 16)
+                info.sz = end - start
+                total_sz += info.sz
+                #print info.start_address, info.end_address, info.sz, info.name
+        elif status == StackStatus.MODULE_END:
+            break
+        line = f.readline()
+    print 'total size', total_sz / 1024 / 1024
+    f.close()
+
+
 if __name__ == "__main__":
     file_name = '/Users/mjzheng/Downloads/memory/diff.txt'
     parse_memory(file_name)
+    parse_module(file_name)

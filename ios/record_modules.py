@@ -15,6 +15,8 @@ def get_modules(pid):
     child = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE,stdout=subprocess.PIPE)
     child.stdin.write('quit')
     stdout, stderr = child.communicate()
+    print stderr
+    print stdout
     lines = stdout.splitlines()
     module_list = []
     for line in lines:
@@ -49,4 +51,4 @@ def export_module_to_file(pid, save_path):
 
 
 if __name__ == "__main__":
-    export_module_to_file(54098, '34.log')
+    export_module_to_file(2971, '34.log')

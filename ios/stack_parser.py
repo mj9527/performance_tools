@@ -6,6 +6,7 @@ sys.path.append("..")
 import symbol_parser
 import setting
 import stack_printer
+import base_def
 
 
 def get_all_id_to_item(root):
@@ -108,23 +109,6 @@ def get_id(item):
     return item.attrib.get('id') if item.attrib.get('id') else item.attrib.get('ref')
 
 
-class NodeInfo:
-    def __init__(self, thread_id, node):
-        self.node = node
-        self.thread_id = thread_id
-        self.child_list = []
-
-
-class FrameInfo:
-    def __init__(self, index, address, weight):
-        self.index = index
-        self.address = address
-        self.self_weight = weight
-        self.all_weight = weight
-        self.func_name = ""
-        self.module = ""
-
-
 def get_thread_tree_list(thread_id_to_backtrace_list, id_to_item):
     thread_tree_list = []
     for (thread_id, backtrace_list) in thread_id_to_backtrace_list.items():
@@ -132,7 +116,7 @@ def get_thread_tree_list(thread_id_to_backtrace_list, id_to_item):
         # if thread_name.find('pthread_start 0x18fecc') == -1:
         #     continue
         # print ('the same ....', thread_name)
-        root = NodeInfo(thread_id, FrameInfo(0, thread_name, 0))
+        root = base_def.NodeInfo(thread_id, base_def.FrameInfo(0, thread_name, 0))
         get_thread_tree(root, backtrace_list)
         thread_tree_list.append(root)
     return thread_tree_list
@@ -158,7 +142,7 @@ def get_child_node(child_list, index, address, weight):
             node.self_weight += weight
             node.all_weight += weight
             return child
-    child = NodeInfo(0, FrameInfo(index, address, weight))
+    child = base_def.NodeInfo(0, base_def.FrameInfo(index, address, weight))
     child_list.append(child)
     return child
 

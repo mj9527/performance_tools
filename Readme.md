@@ -23,3 +23,9 @@ run_time : 采集时间
 1. windows_output_dir，设置捕获文件输出目录
 2. wpt_dir, 设置wpt安装目录
 3. 运行python windows_director.py
+
+
+# 内存火焰图
+../FlameGraph/stackcollapse.pl $filename.perf > $filename.stack
+
+../FlameGraph/flamegraph.pl --color=mem $filename.stack > $filename.svg

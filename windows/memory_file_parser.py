@@ -127,15 +127,15 @@ def preproccess_stack(stack_list):
         words = thread_stack.first_line.split()
         thread_stack.alloc_size = int(words[1])
         thread_stack.frames = thread_stack.frames[::-1]
-        index = 1
-        for frame in thread_stack.frames:
+        for index, frame in enumerate(thread_stack.frames):
             parts = frame.split('!')
             info = base_def.FrameInfo(index, "", thread_stack.alloc_size)
             info.module = parts[0].strip()
             func_info = parts[1].split(' ')
             info.func_name = func_info[0]
+            info.address = info.func_name
+            info.index = index
             thread_stack.frame_list.append(info)
-            index += 1
     return stack_list
 
 

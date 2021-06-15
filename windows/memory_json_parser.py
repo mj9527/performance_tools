@@ -31,10 +31,13 @@ def get_thread_tree(root, thread_stack):
 def json_parser(file_name, output_dir):
     stack_list = memory_file_parser.base_parser(file_name)
 
-    # thread_to_stack_list = group_stack(stack_list)
+    # thread_tree_list = get_thread_tree_list(stack_list)
+
+    thread_to_stack_list = group_stack(stack_list)
+
+    thread_tree_list = get_all_thread_tree(thread_to_stack_list)
 
     # step 1, get stack alloc size and reverse stack
-    thread_tree_list = get_thread_tree_list(stack_list)
 
     # step 2
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
@@ -43,6 +46,10 @@ def json_parser(file_name, output_dir):
     json_file = prefix + '.json'
     json_data = stack_printer.get_json_data(thread_tree_list)
     stack_printer.write_json_file(json_file, json_data)
+
+    text_file = prefix + '.txt'
+    text_data = stack_printer.get_txt_data(thread_tree_list)
+    stack_printer.write_txt_file(text_file, text_data)
 
     flame_file = prefix + "_flame.html"
     flame_graph.get_flamegrap_from_json(json_file, flame_file)
@@ -64,6 +71,40 @@ def group_stack(stack_list):
             thread_to_stack_list[start_func] = thread_stack_list
     print len(thread_to_stack_list)
     return thread_to_stack_list
+
+
+def get_all_thread_tree(thread_to_stack_list):
+    thread_tree_list = []
+    for start_func, thread_stack_list in thread_to_stack_list.items():
+        root = base_def.NodeInfo(0, base_def.FrameInfo(0, "", 0))
+        get_thread_tree2(root, thread_stack_list)
+        thread_tree_list.append(root)
+    return thread_tree_list
+
+
+def get_thread_tree2(root, thread_stack_list):
+    for thread_stack in thread_stack_list:
+        child_list = root.child_list
+        address_list = thread_stack.frame_list
+        weight = thread_stack.alloc_size
+        for index, frame_info in enumerate(address_list):
+            child = get_child_node2(child_list, index, frame_info, weight)
+            child_list = child.child_list
+    for child in root.child_list:
+        root.node.self_weight += child.node.self_weight
+        root.node.all_weight += child.node.all_weight
+
+
+def get_child_node2(child_list, index, frame_info, weight):
+    for child in child_list:
+        node = child.node
+        if node.index == frame_info.index and node.func_name == frame_info.func_name:
+            node.self_weight += weight
+            node.all_weight += weight
+            return child
+    child = base_def.NodeInfo(0, frame_info)
+    child_list.append(child)
+    return child
 
 
 if __name__ == "__main__":

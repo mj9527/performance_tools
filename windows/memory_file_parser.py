@@ -78,7 +78,7 @@ def base_parser(file_name):
 def trim_line(line):
     line = line.strip()
     line = line.replace('\r\n', '')
-    print line
+    #print line
     return line
 
 

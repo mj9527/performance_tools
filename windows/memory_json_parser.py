@@ -1,5 +1,4 @@
 # coding=utf-8
-import flame_graph
 import datetime
 import memory_file_parser
 import sys
@@ -7,6 +6,7 @@ sys.path.append("..")
 import setting
 import base_def
 import stack_printer
+import flame_graph
 
 
 def get_thread_tree_list(stack_list):
@@ -31,6 +31,8 @@ def get_thread_tree(root, thread_stack):
 def json_parser(file_name, output_dir):
     stack_list = memory_file_parser.base_parser(file_name)
 
+    # thread_to_stack_list = group_stack(stack_list)
+
     # step 1, get stack alloc size and reverse stack
     thread_tree_list = get_thread_tree_list(stack_list)
 
@@ -48,6 +50,20 @@ def json_parser(file_name, output_dir):
     sunburst_file = prefix + "_sunburst.html"
     flame_graph.get_sunburstgraph_from_json(json_file, sunburst_file)
     return json_file
+
+
+def group_stack(stack_list):
+    thread_to_stack_list = {}
+    for thread_stack in stack_list:
+        start_func = thread_stack.frame_list[0].func_name
+        if start_func in thread_to_stack_list.keys():
+            thread_stack_list = thread_to_stack_list[start_func]
+            thread_stack_list.append(thread_stack)
+        else:
+            thread_stack_list = [thread_stack]
+            thread_to_stack_list[start_func] = thread_stack_list
+    print len(thread_to_stack_list)
+    return thread_to_stack_list
 
 
 if __name__ == "__main__":

@@ -16,7 +16,9 @@ firstLevel = [
     "jitter",
     "网络",
     "视频编解码",
-    "其他"
+    "其他",
+    "视频前处理",
+    "渲染"
 ]
 
 
@@ -53,6 +55,12 @@ partToItsChildList = {
         "xc中uv的io处理",
         "xc的cycle_once",
         "音频无参考评分LSQA"
+    ],
+    "视频前处理": [
+        "美颜"
+    ],
+    "渲染": [
+        "视频渲染"
     ]
 }
 
@@ -76,12 +84,16 @@ funcToPart = {
     "rtp_packet_delive": "rtp",
 
     "process_video_frame": "视频编码",
+    "video_encoder_loop": "视频编码",
     "xc_codec_video_decode": "视频解码",
+    "video_stream_decoder_loop": "视频解码",
 
     "xc_mutex_lock_wait": "xc中的锁",
     "uv__io_poll": "xc中uv的io处理",
     "cycle_once": "xc的cycle_once",
-    "XNNAudioListener::DoAudioRenderProcess" : "音频无参考评分LSQA"
+    "XNNAudioListener::DoAudioRenderProcess": "音频无参考评分LSQA",
+    "TRTC::YTBeautyWrapper::process": "美颜",
+    "VideoRenderImpl::OnTimer": "视频渲染"
 }
 
 
@@ -164,6 +176,8 @@ def sunburst_formatting(input_file_path):
         "xc中uv的io处理": 0,
         "xc的cycle_once": 0,
         "音频无参考评分LSQA": 0,
+        "美颜": 0,
+        "视频渲染": 0,
     }
     sunburst_dataset = []
     with open(input_file_path, 'r') as input_file:

@@ -75,10 +75,14 @@ def group_stack(stack_list):
 
 def get_all_thread_tree(thread_to_stack_list):
     thread_tree_list = []
+    index = 1
     for start_func, thread_stack_list in thread_to_stack_list.items():
-        root = base_def.NodeInfo(0, base_def.FrameInfo(0, "", 0))
+        root = base_def.NodeInfo(index, base_def.FrameInfo(0, "", 0))
         get_thread_tree2(root, thread_stack_list)
         thread_tree_list.append(root)
+        index = index + 1
+        # if index == 10:
+        #     break
     return thread_tree_list
 
 
@@ -93,6 +97,8 @@ def get_thread_tree2(root, thread_stack_list):
     for child in root.child_list:
         root.node.self_weight += child.node.self_weight
         root.node.all_weight += child.node.all_weight
+        root.node.module = child.node.module
+        root.node.func_name = child.node.func_name
 
 
 def get_child_node2(child_list, index, frame_info, weight):

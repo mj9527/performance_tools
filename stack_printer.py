@@ -50,29 +50,39 @@ def get_node_txt_data(node):
     return frame_info
 
 
-def get_json_data(thread_tree_list):
-    json_root = {}
+def get_json_data(stack_collapse_list):
     threads = []
-    for thread_tree in thread_tree_list:
-        frame_list = []
-        get_tree_json_data(thread_tree, frame_list)
-        th = {"threadID": thread_tree.thread_id, "func": frame_list}
-        threads.append(th)
-    json_root["threads"] = threads
+    for index, root in enumerate(stack_collapse_list):
+        frame = scan_tree_postorder_dfs(root.child_list[0])
+        child_list = [frame]
+        # child_list = []
+        # get_tree_json_data(root.child_list[0], child_list)
+        thread = {"threadID": index+1, "func": child_list}
+        threads.append(thread)
+    json_root = {"threads": threads}
     return json_root
 
 
-def get_tree_json_data(tree_node, frame_list):
+def scan_tree_postorder_dfs(node):
+    child_format_list = []
+    for child in node.child_list:
+        child_format = scan_tree_postorder_dfs(child)
+        child_format_list.append(child_format)
+    frame = get_node_json_data(node.data, child_format_list)
+    return frame
+
+
+def get_tree_json_data(node, child_list):
     child_frame_list = []
-    frame = get_node_json_data(tree_node.node, child_frame_list)
-    frame_list.append(frame)
+    frame = get_node_json_data(node.data, child_frame_list)
+    child_list.append(frame)
 
-    if not tree_node.child_list:
+    if not node.child_list:
         return
-    if len(tree_node.child_list) == 0:
+    if len(node.child_list) == 0:
         return
 
-    for child in tree_node.child_list:
+    for child in node.child_list:
         get_tree_json_data(child, child_frame_list)
 
 

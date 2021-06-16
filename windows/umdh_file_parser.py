@@ -138,8 +138,9 @@ def preproccess_stack(stack_list):
         for index, frame in enumerate(thread_stack.frames[::-1]):
             parts = frame.split('!')
             module = parts[0].strip()
-            #print index, frame
-            func_name = get_func_name(parts[1])
+            func_info = parts[1].split(' ')
+            func_name = func_info[0]
+            #func_name = get_func_name(parts[1])
             address = func_name
             info = base_def.FrameInfo(index, address, func_name, module, weight)
             frame_list.append(info)

@@ -1,0 +1,74 @@
+// Debug library initialized ...
+2A0000-2A6FFF DBGHELP: idbg_demo - private symbols & lines 
+        .\idbg_demo.pdb
+77520000-776B9FFF DBGHELP: ntdll - public symbols  
+        \\symbols.medialab.oa.com\Share2\Dev\WeMeet\symbols\wntdll.pdb\3C76DC49D7ABBA73C8037AC0976EF7B51\wntdll.pdb
+76A00000-76ADFFFF DBGHELP: KERNEL32 - public symbols  
+        D:\symbols\MSSymbols\wkernel32.pdb\6737C38DE9E6C2A72FB81D531E1878E81\wkernel32.pdb
+76530000-7672EFFF DBGHELP: KERNELBASE - public symbols  
+        \\symbols.medialab.oa.com\Share2\Dev\WeMeet\symbols\wkernelbase.pdb\283E12E7288AFB3A16E8A9EAE3FD066E1\wkernelbase.pdb
+74E70000-74F8FFFF DBGHELP: ucrtbase - public symbols  
+        D:\symbols\MSSymbols\ucrtbase.pdb\B4181679117EBBE9932D7120614B4A971\ucrtbase.pdb
+6A9B0000-6A9C3FFF DBGHELP: VCRUNTIME140 - private symbols & lines 
+        D:\symbols\MSSymbols\vcruntime140.i386.pdb\0826C3DEB39248978CB979BD320290231\vcruntime140.i386.pdb
+70C30000-70C53FFF DBGHELP: WINMM - public symbols  
+        D:\symbols\MSSymbols\winmm.pdb\B23362A0139A17A9278A28DA8938169E1\winmm.pdb
+74DA0000-74E5EFFF DBGHELP: msvcrt - public symbols  
+        D:\symbols\MSSymbols\msvcrt.pdb\1EBA660F39B8C2CF4A66A428FAF0D0421\msvcrt.pdb
+70BB0000-70BD2FFF DBGHELP: WINMMBASE - public symbols  
+        D:\symbols\MSSymbols\WINMMBASE.pdb\FA9C43DC68CD9A9E37B97480E8393A131\WINMMBASE.pdb
+764F0000-7652AFFF DBGHELP: cfgmgr32 - public symbols  
+        D:\symbols\MSSymbols\cfgmgr32.pdb\618B5FD435BB907A41AB25EE57AD442E1\cfgmgr32.pdb
+//                                                                          
+// Each log entry has the following syntax:                                 
+//                                                                          
+// + BYTES_DELTA (NEW_BYTES - OLD_BYTES) NEW_COUNT allocs BackTrace TRACEID 
+// + COUNT_DELTA (NEW_COUNT - OLD_COUNT) BackTrace TRACEID allocations      
+//     ... stack trace ...                                                  
+//                                                                          
+// where:                                                                   
+//                                                                          
+//     BYTES_DELTA - increase in bytes between before and after log         
+//     NEW_BYTES - bytes in after log                                       
+//     OLD_BYTES - bytes in before log                                      
+//     COUNT_DELTA - increase in allocations between before and after log   
+//     NEW_COUNT - number of allocations in after log                       
+//     OLD_COUNT - number of allocations in before log                      
+//     TRACEID - decimal index of the stack trace in the trace database     
+//         (can be used to search for allocation instances in the original  
+//         UMDH logs).                                                      
+//                                                                          
+
+
++    4096 (   4096 -      0)      1 allocs	BackTrace2105C74
++       1 (      1 -      0)	BackTrace2105C74	allocations
+
+	ntdll!RtlpCallInterceptRoutine+26
+	ntdll!RtlpAllocateHeapInternal+1096
+	ntdll!RtlAllocateHeap+3E
+	ucrtbase!_malloc_base+26
+	ucrtbase!__acrt_stdio_begin_temporary_buffering_nolock+99
+	ucrtbase!<lambda_0be4ab1c2a6918fda4e39227d83ea893>::operator()+2C
+	ucrtbase!__crt_seh_guarded_call<int>::operator()<<lambda_c29ee0499b841886b80d843682cc403a>,<lambda_0be4ab1c2a6918fda4e39227d83ea893> &,<lambda_5a3ed3da325c8ea037a470278c0f2d16> >+2B
+	ucrtbase!common_vfprintf<__crt_stdio_output::standard_base,char>+56
+	ucrtbase!__stdio_common_vfprintf+1C
+	idbg_demo!printf+2A (c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h, 954)
+	idbg_demo!main+16 (h:\mj_git\idbg\platform\windows\idbg_demo\main.cc, 42)
+	KERNEL32!BaseThreadInitThunk+19
+	ntdll!__RtlUserThreadStart+2F
+	ntdll!_RtlUserThreadStart+1B
+
++       4 (      4 -      0)      1 allocs	BackTrace2105D08
++       1 (      1 -      0)	BackTrace2105D08	allocations
+
+	ntdll!RtlpCallInterceptRoutine+26
+	ntdll!RtlpAllocateHeapInternal+1096
+	ntdll!RtlAllocateHeap+3E
+	ucrtbase!_malloc_base+26
+	idbg_demo!main+29 (h:\mj_git\idbg\platform\windows\idbg_demo\main.cc, 43)
+	KERNEL32!BaseThreadInitThunk+19
+	ntdll!__RtlUserThreadStart+2F
+	ntdll!_RtlUserThreadStart+1B
+
+
+Total increase ==   4100 requested +     52 overhead =   4152

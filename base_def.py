@@ -1,8 +1,8 @@
 
 
 class TreeNode:
-    def __init__(self, node):
-        self.node = node
+    def __init__(self, data):
+        self.data = data
         self.child_list = []
 
 

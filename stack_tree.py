@@ -28,6 +28,7 @@ def collapse_stack_group_list(stack_group_list):
         root = base_def.TreeNode(None)
         collapse_stack_group(root, stack_group)
         stack_collapse_list.append(root)
+    #root.data = root.child_list[0].data
     return stack_collapse_list
 
 
@@ -41,10 +42,10 @@ def collapse_stack_group(root, stack_group):
 
 def get_child_node(child_list, frame):
     for child in child_list:
-        node = child.node
-        if node.index == frame.index and node.func_name == frame.func_name:
-            node.self_weight += frame.weight
-            node.all_weight += frame.weight
+        data = child.data
+        if data.index == frame.index and data.func_name == frame.func_name:
+            data.self_weight += frame.self_weight
+            data.all_weight += frame.all_weight
             return child
     child = base_def.TreeNode(frame)
     child_list.append(child)

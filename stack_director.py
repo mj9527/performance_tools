@@ -1,17 +1,12 @@
 # coding=utf-8
 import datetime
-import umdh_file_parser
-import sys
-sys.path.append("..")
-import setting
 import stack_tree
+import stack_printer
 import stack_ui
+import setting
 
 
-def json_parser(file_name, output_dir):
-    std_stack_list = umdh_file_parser.get_std_stack_list(file_name)
-
-    # step 2
+def start_play(std_stack_list, output_dir):
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
     prefix = output_dir + current_time
 
@@ -25,6 +20,6 @@ def json_parser(file_name, output_dir):
 if __name__ == "__main__":
     file_name = setting.input_memory_file
     output_dir = setting.output_memory_dir
-    json_parser(file_name, output_dir)
+    #json_parser(file_name, output_dir)
 
 

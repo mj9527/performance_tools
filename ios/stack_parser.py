@@ -116,7 +116,7 @@ def get_thread_tree_list(thread_id_to_backtrace_list, id_to_item):
         # if thread_name.find('pthread_start 0x18fecc') == -1:
         #     continue
         # print ('the same ....', thread_name)
-        root = base_def.NodeInfo(thread_id, base_def.FrameInfo(0, thread_name, 0))
+        root = base_def.TreeNode(thread_id, base_def.FrameInfo(0, thread_name, 0))
         get_thread_tree(root, backtrace_list)
         thread_tree_list.append(root)
     return thread_tree_list
@@ -142,7 +142,7 @@ def get_child_node(child_list, index, address, weight):
             node.self_weight += weight
             node.all_weight += weight
             return child
-    child = base_def.NodeInfo(0, base_def.FrameInfo(index, address, weight))
+    child = base_def.TreeNode(0, base_def.FrameInfo(index, address, weight))
     child_list.append(child)
     return child
 

@@ -22,17 +22,14 @@ class ThreadStack:
         self.first_line = ""
         self.second_line = ""
         self.frames = []
-        self.alloc_size = 0
-        self.thread_id = 0
-        self.frame_list = []
 
 
 class ModuleInfo:
     def __init__(self):
-        start_address = 0x0
-        end_address = 0x0
-        sz = 0;
-        name = ""
+        self.start_address = 0x0
+        self.end_address = 0x0
+        self.sz = 0
+        self.name = ""
 
 
 # 模块列表解析
@@ -69,10 +66,10 @@ def parse_module(file_name):
     f.close()
 
 
-def base_parser(file_name):
+def get_std_stack_list(file_name):
     stack_list = get_stack_list_from_file(file_name)
-    stack_list = preproccess_stack(stack_list)
-    return stack_list
+    std_stack_list = preproccess_stack(stack_list)
+    return std_stack_list
 
 
 def trim_line(line):
@@ -122,24 +119,36 @@ def get_stack_list_from_file(file_name):
     return stack_list
 
 
+def get_func_name(func_info):
+    pos = func_info.rfind(' (')
+    if pos != -1:
+        func_name = func_info[0:pos]
+    else:
+        func_name = func_info
+    func_name.strip()
+    return func_name
+
+
 def preproccess_stack(stack_list):
+    std_stack_list = []
     for thread_stack in stack_list:
-        words = thread_stack.first_line.split()
-        thread_stack.alloc_size = int(words[1])
-        thread_stack.frames = thread_stack.frames[::-1]
-        for index, frame in enumerate(thread_stack.frames):
+        parts = thread_stack.first_line.split()
+        weight = int(parts[1])
+        frame_list = []
+        for index, frame in enumerate(thread_stack.frames[::-1]):
             parts = frame.split('!')
-            info = base_def.FrameInfo(index, "", thread_stack.alloc_size)
-            info.module = parts[0].strip()
-            func_info = parts[1].split(' ')
-            info.func_name = func_info[0]
-            info.address = info.func_name
-            info.index = index
-            thread_stack.frame_list.append(info)
-    return stack_list
+            module = parts[0].strip()
+            #print index, frame
+            func_name = get_func_name(parts[1])
+            address = func_name
+            info = base_def.FrameInfo(index, address, func_name, module, weight)
+            frame_list.append(info)
+        std_stack = base_def.StackInfo(frame_list, weight)
+        std_stack_list.append(std_stack)
+    return std_stack_list
 
 
 if __name__ == "__main__":
     file_name = setting.input_memory_file
     output_dir = setting.output_memory_dir
-    base_parser(file_name)
+    get_std_stack_list(file_name)

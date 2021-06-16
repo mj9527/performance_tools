@@ -77,5 +77,5 @@ def scan_stack_list(stack_list, output_dir):
 if __name__ == "__main__":
     file_name = setting.input_memory_file
     output_dir = setting.output_memory_dir
-    stack_list = umdh_file_parser.base_parser(file_name)
+    stack_list = umdh_file_parser.get_std_stack_list(file_name)
     scan_stack_list(stack_list, output_dir)

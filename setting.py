@@ -50,7 +50,7 @@ windows_output_dir = 'H:/mj_git/perf_data/'
 wpt_dir = 'C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/'
 
 #memory setting
-input_memory_file = '//Users/mjzheng/Downloads/memory/213_bak/diff.txt'
+input_memory_file = '//Users/mjzheng/Downloads/memory/213_bak/6_5.txt'
 output_memory_dir = '/Users/mjzheng/Downloads/memory/213_bak/'
 business_module_list = ['wemeet_app_sdk', 'wemeet', 'wemeet_framework_common', 'wemeetapp', 'imsdk', 'xnn', 'xcast']
 base_module_list = ['GF']

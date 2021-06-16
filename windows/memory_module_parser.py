@@ -4,7 +4,7 @@ import sys
 sys.path.append("..")
 import setting
 import memory_ui
-import memory_file_parser
+import umdh_file_parser
 
 
 def get_stack_module(stack_module_list, define_module_list):
@@ -77,5 +77,5 @@ def scan_stack_list(stack_list, output_dir):
 if __name__ == "__main__":
     file_name = setting.input_memory_file
     output_dir = setting.output_memory_dir
-    stack_list = memory_file_parser.base_parser(file_name)
+    stack_list = umdh_file_parser.base_parser(file_name)
     scan_stack_list(stack_list, output_dir)

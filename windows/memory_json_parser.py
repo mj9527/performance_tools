@@ -1,6 +1,6 @@
 # coding=utf-8
 import datetime
-import memory_file_parser
+import umdh_file_parser
 import sys
 sys.path.append("..")
 import setting
@@ -29,7 +29,7 @@ def get_thread_tree(root, thread_stack):
 
 
 def json_parser(file_name, output_dir):
-    stack_list = memory_file_parser.base_parser(file_name)
+    stack_list = umdh_file_parser.base_parser(file_name)
 
     # thread_tree_list = get_thread_tree_list(stack_list)
 

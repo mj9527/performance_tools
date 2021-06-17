@@ -10,16 +10,16 @@ import base_utils
 
 
 def start():
-    output_dir, prefix = base_utils.get_work_dir_and_prefix_with_config()
-    trace_file, ret = record_apple.record_apple_config(prefix)
-    if ret != 0:
-        return
+    # output_dir, prefix = base_utils.get_work_dir_and_prefix_with_config()
+    # trace_file, ret = record_apple.record_apple_config(prefix)
+    # if ret != 0:
+    #     return
+    #
+    # print ('start parse content ', trace_file)
+    # time_file = content_parser.export_schema(trace_file, 'time-profile', prefix)
 
-    print ('start parse content ', trace_file)
-    time_file = content_parser.export_schema(trace_file, 'time-profile', prefix)
-
-    # prefix = '/Users/mjzheng/Downloads/ios_data/2021-04-08_17_23_22/2021-04-08_17_23_22'
-    # time_file = prefix + '_time-profile.xml'
+    prefix = '/Users/mjzheng/Downloads/ios_data/2021-06-04_17_26_23/2021-06-04_17_26_23'
+    time_file = prefix + '_time-profile.xml'
 
     json_file = stack_parser.analyse_group(time_file, prefix)
 

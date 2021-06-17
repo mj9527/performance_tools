@@ -5,8 +5,9 @@ import sys
 sys.path.append("..")
 import symbol_parser
 import setting
-import stack_printer
+import stack_txt
 import base_def
+import stack_json
 
 
 def get_all_id_to_item(root):
@@ -113,10 +114,7 @@ def get_thread_tree_list(thread_id_to_backtrace_list, id_to_item):
     thread_tree_list = []
     for (thread_id, backtrace_list) in thread_id_to_backtrace_list.items():
         thread_name = get_thread_name(thread_id, id_to_item)
-        # if thread_name.find('pthread_start 0x18fecc') == -1:
-        #     continue
-        # print ('the same ....', thread_name)
-        root = base_def.TreeNode(thread_id, base_def.FrameInfo(0, thread_name, 0))
+        root = base_def.TreeNode(base_def.FrameInfo(0, thread_name, "", "", 0))
         get_thread_tree(root, backtrace_list)
         thread_tree_list.append(root)
     return thread_tree_list
@@ -131,18 +129,18 @@ def get_thread_tree(root, backtrace_list):
             child = get_child_node(child_list, index, address, weight)
             child_list = child.child_list
     for child in root.child_list:
-        root.node.self_weight += child.node.self_weight
-        root.node.all_weight += child.node.all_weight
+        root.data.self_weight += child.data.self_weight
+        root.data.all_weight += child.data.all_weight
 
 
 def get_child_node(child_list, index, address, weight):
     for child in child_list:
-        node = child.node
+        node = child.data
         if node.index == index and node.address == address:
             node.self_weight += weight
             node.all_weight += weight
             return child
-    child = base_def.TreeNode(0, base_def.FrameInfo(index, address, weight))
+    child = base_def.TreeNode(base_def.FrameInfo(index, address, "", "", weight))
     child_list.append(child)
     return child
 
@@ -164,7 +162,7 @@ def analyse_group(xml_file, prefix):
 
     # step 2 thread_id->[backtrace list]
     thread_id_to_backtrace_list, address_list = get_thread_to_backtrace_list(root, id_to_item)
-    stack_printer.print_thread_backtrace(thread_id_to_backtrace_list, id_to_item)
+    stack_txt.print_thread_backtrace(thread_id_to_backtrace_list, id_to_item)
 
     # get symbol address
     address_symbol = {}
@@ -181,13 +179,13 @@ def analyse_group(xml_file, prefix):
 
     # step
     txt_file = prefix + '.txt'
-    txt_tree = stack_printer.get_txt_data(thread_tree_list)
-    stack_printer.write_txt_file(txt_file, txt_tree)
+    txt_tree = stack_txt.get_txt_data(thread_tree_list)
+    stack_txt.write_txt_file(txt_tree, txt_file)
 
     # step 4
     json_file = prefix + '.json'
-    json_data = stack_printer.get_json_data(thread_tree_list)
-    stack_printer.write_json_file(json_file, json_data)
+    json_data = stack_json.get_json_data(thread_tree_list)
+    stack_json.write_json_file(json_data, json_file)
     return json_file
 
 
@@ -197,7 +195,7 @@ def symbol_thread_tree(thread_tree_list, address_symbol):
 
 
 def symbol_frame_tree(tree_node, address_symbol):
-    node = tree_node.node
+    node = tree_node.data
     if node.address in address_symbol:
         symbol = address_symbol[node.address]
         node.module = symbol.module_name

@@ -30,7 +30,7 @@ def get_frame_txt_data(origin_frame):
     for i in range(origin_frame.index):
         frame_info += ' '
     frame_info += str(origin_frame.index) + ' '
-    frame_info += origin_frame.address
+    frame_info += origin_frame.func_name
     frame_info += ' ' + str(origin_frame.all_weight)
     return frame_info
 
@@ -60,4 +60,18 @@ def print_thread_backtrace(thread_group, id_to_item):
             detail = bt.address_list
             print (detail, bt.weight)
         print ('\n')
+
+
+# def print_thread_backtrace(thread_group, id_to_item):
+#     for (thread_id, thread) in thread_group.items():
+#         thread_item = id_to_item.get(thread_id)
+#         thread_name = thread_item.attrib.get('fmt')
+#         print (thread_name)
+#         for (backtrace_id, bt) in thread.items():
+#             detail = ''
+#             for symbol in bt.symbol_list:
+#                 detail += symbol.func_name + ','
+#             # detail = bt.address_list
+#             print (detail, bt.weight)
+#         print ('\n')
 

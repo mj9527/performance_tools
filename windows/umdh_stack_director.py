@@ -1,9 +1,10 @@
 # coding=utf-8
-import umdh_file_parser
 import sys
-sys.path.append("..")
+sys.path.append("../")
+
 import setting
 import stack_director
+import umdh_file_parser
 
 
 def umdh_stack_parser(file_name, output_dir):
@@ -15,4 +16,3 @@ if __name__ == "__main__":
     file_name = setting.input_memory_file
     output_dir = setting.output_memory_dir
     umdh_stack_parser(file_name, output_dir)
-

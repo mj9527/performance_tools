@@ -4,7 +4,7 @@ import content_parser
 import stack_parser
 import sys
 sys.path.append("..")
-import flame_graph
+import stack_graph
 import setting
 import base_utils
 
@@ -18,16 +18,16 @@ def start():
     # print ('start parse content ', trace_file)
     # time_file = content_parser.export_schema(trace_file, 'time-profile', prefix)
 
-    prefix = '/Users/mjzheng/Downloads/ios_data/2021-06-04_17_26_23/2021-06-04_17_26_23'
+    prefix = '/Users/mjzheng/Downloads/ios_data/2021-04-12_19_46_32/2021-04-12_19_46_32'
     time_file = prefix + '_time-profile.xml'
 
     json_file = stack_parser.analyse_group(time_file, prefix)
 
     flame_file = prefix + "_flame.html"
-    flame_graph.get_flamegrap_from_json(json_file, flame_file)
+    stack_graph.get_flame_graph(json_file, flame_file)
 
     sunburst_file = prefix + "_sunburst.html"
-    flame_graph.get_sunburstgraph_from_json(json_file, sunburst_file)
+    stack_graph.get_sunburst_graph(json_file, sunburst_file)
 
 
 if __name__ == "__main__":

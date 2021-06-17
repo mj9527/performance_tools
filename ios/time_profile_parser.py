@@ -6,7 +6,33 @@ sys.path.append("..")
 import symbol_parser
 import setting
 import base_def
-import stack_director
+
+
+class Backtrace:
+    def __init__(self, backtrace_id, weight, address_list):
+        self.backtrace_id = backtrace_id
+        self.weight = weight
+        self.address_list = address_list
+
+
+def parse_time_profile(xml_file, prefix):
+    tree = ET.parse(xml_file)
+    root = tree.getroot()
+    id_to_item = get_all_id_to_item(root)
+
+    # step 1 : {thread_id->{backtrace_id->backtrace}}
+    thread_id_to_backtrace_list = group_stack_list_by_thread(root, id_to_item)
+
+    # step 2 : get symbol address
+    address_symbol = {}
+    if setting.symbol_parse == 1:
+        module_file = prefix + '.log'
+        address_list = get_address_list(thread_id_to_backtrace_list)
+        address_symbol = symbol_parser.symbol_with_file(module_file, address_list)
+
+    # step 3 : {thread_id->stack_list]}
+    stack_group_list = symbol_thread_backtrace(thread_id_to_backtrace_list, address_symbol)
+    return stack_group_list
 
 
 def get_all_id_to_item(root):
@@ -28,66 +54,65 @@ def get_id_to_item(item):
     return dict2
 
 
-class Backtrace:
-    def __init__(self, backtrace_id, weight, detail):
-        self.backtrace_id = backtrace_id
-        self.weight = weight
-        self.address_list = detail
-        self.symbol_list = []
-        self.frame_list =[]
-
-
 # # 相同backtrace_id weight聚合, 并解析backtrace_id
-def get_thread_to_backtrace_list(root, id_to_item):
-    thread_id_to_backtrace_list = {}
-    address_list = []
+def group_stack_list_by_thread(root, id_to_item):
+    thread_id_to_stack_list = {}
     for c in root[0]:
         if c.tag != 'row':
             continue
-        thread_id, backtrace_id, weight = get_row_info(c, id_to_item)
+        thread_id, backtrace_id, weight_id = get_row_info(c)
         if backtrace_id == 0:
             print ('waring: no backtrace item', thread_id)
             continue
 
+        weight = get_weight_by_id(weight_id, id_to_item)
+        thread_name = get_thread_name(thread_id, id_to_item)
+
         backtrace_list = {}
-        if thread_id in thread_id_to_backtrace_list.keys():
-            backtrace_list = thread_id_to_backtrace_list[thread_id]
+        if thread_id in thread_id_to_stack_list.keys():
+            backtrace_list = thread_id_to_stack_list[thread_id]
         if backtrace_id in backtrace_list.keys():
             bt = backtrace_list[backtrace_id]
             bt.weight += weight
             backtrace_list[backtrace_id] = bt
         else:
-            backtrace_item = id_to_item.get(backtrace_id)
-            detail = get_backtrace_detail(id_to_item, backtrace_item, address_list)
-            bt = Backtrace(backtrace_id, weight, detail)
+            address_list = get_backtrace_by_id(backtrace_id, id_to_item)
+            address_list.insert(0, thread_name)
+            bt = Backtrace(backtrace_id, weight, address_list)
             backtrace_list[backtrace_id] = bt
-        thread_id_to_backtrace_list[thread_id] = backtrace_list
-    return thread_id_to_backtrace_list, address_list
+        thread_id_to_stack_list[thread_id] = backtrace_list
+    return thread_id_to_stack_list
 
 
-def get_row_info(c, id_to_item):
-    weight = 0
+def get_row_info(c):
+    weight_id = 0
     thread_id = 0
     backtrace_id = 0
     for i in c:
         if i.tag == 'weight':
             weight_id = get_id(i)
-            weight_item = id_to_item.get(weight_id)
-            weight_value = weight_item.attrib.get('fmt')
-            ls = weight_value.split()
-            if len(ls) == 2:
-                weight = float(ls[0])
-            else:
-                print ('error')
         elif i.tag == 'thread':
             thread_id = get_id(i)
         elif i.tag == 'backtrace':
             backtrace_id = get_id(i)
-    return thread_id, backtrace_id, weight
+    return thread_id, backtrace_id, weight_id
 
 
-def get_backtrace_detail(id_to_item, item, address_list):
-    result = []
+def get_weight_by_id(weight_id, id_to_item):
+    weight_item = id_to_item.get(weight_id)
+    weight_value = weight_item.attrib.get('fmt')
+    ls = weight_value.split()
+    if len(ls) == 2:
+        weight = float(ls[0])
+    else:
+        print 'fail to get weight ', weight_id
+        weight = 0.0
+    return weight
+
+
+def get_backtrace_by_id(backtrace_id, id_to_item):
+    item = id_to_item.get(backtrace_id)
+    address_list = []
     for j in item:
         if j.tag == 'text-addresses':
             text_id = get_id(j)
@@ -100,11 +125,9 @@ def get_backtrace_detail(id_to_item, item, address_list):
                         print ("error", frame, j.text)
                         continue
                     address = hex(int(frame))
-                    result.append(address)
-                    if address not in address_list:
-                        address_list.append(address)
-    result.reverse()
-    return result
+                    address_list.append(address)
+    address_list.reverse()
+    return address_list
 
 
 def get_id(item):
@@ -120,49 +143,42 @@ def get_thread_name(thread_id, id_to_item):
     return thread_name
 
 
-def analyse_group(xml_file, prefix):
-    tree = ET.parse(xml_file)
-    root = tree.getroot()
-    # step 1
-    id_to_item = get_all_id_to_item(root)
-
-    # step 2 thread_id->[backtrace list]
-    thread_id_to_backtrace_list, address_list = get_thread_to_backtrace_list(root, id_to_item)
-    #stack_txt.print_thread_backtrace(thread_id_to_backtrace_list, id_to_item)
-
-    # get symbol address
-    address_symbol = {}
-
-    module_file = prefix + '.log'
-    if setting.symbol_parse == 1:
-        address_symbol = symbol_parser.symbol_with_file(module_file, address_list)
-    stack_group_list = symbol_thread_backtrace(thread_id_to_backtrace_list, address_symbol)
-
-    stack_director.start_play2(stack_group_list, prefix)
-    return
-
-
-def symbol_thread_backtrace(thread_group, address_symbol):
+def symbol_thread_backtrace(thread_id_to_backtrace_list, address_symbol):
     stack_group_dict = {}
-    for (thread_id, thread) in thread_group.items():
+    for (thread_id, stacK_list) in thread_id_to_backtrace_list.items():
         std_stack_list = []
-        for (backtrace_id, bt) in thread.items():
-            frame_list = []
-            for index, address in enumerate(bt.address_list):
-                weight = bt.weight
-                if address in address_symbol:
-                    symbol = address_symbol[address]
-                    func_name = symbol.func_name
-                    module = symbol.module_name
-                else:
-                    func_name = address
-                    module = 'unknow'
-                info = base_def.FrameInfo(index, address, func_name, module, weight)
-                frame_list.append(info)
-            std_stack = base_def.StackInfo(frame_list, bt.weight)
+        for (backtrace_id, bt) in stacK_list.items():
+            std_stack = get_std_stack(bt, address_symbol)
             std_stack_list.append(std_stack)
         stack_group_dict[thread_id] = std_stack_list
     return stack_group_dict
+
+
+def get_std_stack(bt, address_symbol):
+    frame_list = []
+    for index, address in enumerate(bt.address_list):
+        weight = bt.weight
+        if address in address_symbol:
+            symbol = address_symbol[address]
+            func_name = symbol.func_name
+            module = symbol.module_name
+        else:
+            func_name = address
+            module = 'unknow'
+        info = base_def.FrameInfo(index, address, func_name, module, weight)
+        frame_list.append(info)
+    std_stack = base_def.StackInfo(frame_list, bt.weight)
+    return std_stack
+
+
+def get_address_list(thread_id_to_stack_list):
+    address_list = []
+    for (thread_id, stack_list) in thread_id_to_stack_list.items():
+        for (backtrace_id, bt) in stack_list.items():
+            for index, address in enumerate(bt.address_list):
+                if address not in address_list:
+                    address_list.append(address)
+    return address_list
 
 
 if __name__ == "__main__":

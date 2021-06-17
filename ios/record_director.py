@@ -2,12 +2,13 @@
 import record_apple
 import content_parser
 #import stack_parser
-import stack_std
+import time_profile_parser
 import sys
 sys.path.append("..")
 import stack_graph
 import setting
 import base_utils
+import stack_director
 
 
 # def start():
@@ -43,7 +44,9 @@ def start():
     prefix = '/Users/mjzheng/Downloads/ios_data/2021-04-12_19_46_32/2021-04-12_19_46_32'
     time_file = prefix + '_time-profile.xml'
 
-    json_file = stack_std.analyse_group(time_file, prefix)
+    stack_group_list = time_profile_parser.parse_time_profile(time_file, prefix)
+
+    stack_director.start_play2(stack_group_list, prefix)
 
 
 if __name__ == "__main__":

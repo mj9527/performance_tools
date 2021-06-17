@@ -109,7 +109,8 @@ def group_stack_list_by_thread(root, id_to_item):
             backtrace_list[backtrace_id] = bt
         else:
             address_list = get_backtrace_by_id(backtrace_id, id_to_item)
-            address_list.insert(0, thread_name)
+            bass_address = thread_name + '_' + str(thread_id)
+            address_list.insert(0, bass_address)
             #print 'insert thread name ', thread_name
             bt = Backtrace(backtrace_id, weight, address_list)
             backtrace_list[backtrace_id] = bt
@@ -177,14 +178,12 @@ def get_thread_name(thread_id, id_to_item):
 
 
 def unify_thread_backtrace(thread_id_to_backtrace_list, address_symbol):
-    stack_group_dict = {}
+    std_stack_list = []
     for (thread_id, stacK_dict) in thread_id_to_backtrace_list.items():
-        std_stack_list = []
         for (backtrace_id, bt) in stacK_dict.items():
             std_stack = get_std_stack(bt, address_symbol)
             std_stack_list.append(std_stack)
-        stack_group_dict[thread_id] = std_stack_list
-    return stack_group_dict
+    return std_stack_list
 
 
 def get_std_stack(bt, address_symbol):

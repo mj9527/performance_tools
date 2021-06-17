@@ -6,10 +6,7 @@ import stack_txt
 import stack_graph
 
 
-def start_play(std_stack_list, output_dir):
-    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
-    prefix = output_dir + current_time
-
+def start_play(std_stack_list, prefix):
     stack_collapse_list = stack_tree.collapse_stack(std_stack_list)
     generate_graph(stack_collapse_list, prefix)
 

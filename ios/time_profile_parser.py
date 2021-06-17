@@ -78,6 +78,7 @@ def group_stack_list_by_thread(root, id_to_item):
         else:
             address_list = get_backtrace_by_id(backtrace_id, id_to_item)
             address_list.insert(0, thread_name)
+            print 'insert thread name ', thread_name
             bt = Backtrace(backtrace_id, weight, address_list)
             backtrace_list[backtrace_id] = bt
         thread_id_to_stack_list[thread_id] = backtrace_list
@@ -139,7 +140,7 @@ def get_thread_name(thread_id, id_to_item):
     thread_name = thread_item.attrib.get('fmt')
     word_list = thread_name.split()
     if len(word_list) >= 2:
-        thread_name = word_list[0] + " " + word_list[1]
+        thread_name = word_list[0] + "_" + word_list[1]
     return thread_name
 
 

@@ -40,7 +40,7 @@ def write_txt_file(list_data, file_name):
         for frame_list in list_data:
             for frame in frame_list:
                 f.write(str(frame))
-                print (frame)
+                #print (frame)
                 f.write('\n')
         f.close()
 

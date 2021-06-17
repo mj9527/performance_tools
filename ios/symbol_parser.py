@@ -94,7 +94,7 @@ def symbol_address(module, address):
     stdout, stderr = p.communicate()
     func_name = []
     if stderr != '':
-        print ('parse error', module.symbol_file)
+        print ('parse error', stderr)
         return func_name
     lines = stdout.splitlines()
     for line in lines:
@@ -117,6 +117,9 @@ def symbol_module_address(modules):
             continue
         str_address = address_list_to_str(module.ls)
         func_name_list = symbol_address(module, str_address)
+        if len(func_name_list) == 0:
+            #print ('fail to symbaol address')
+            continue
         if len(func_name_list) != len(module.ls):
             print ('unmatch length ', module.symbol_file)
             continue

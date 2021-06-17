@@ -31,7 +31,7 @@ def parse_time_profile(xml_file, prefix):
         address_symbol = symbol_parser.symbol_with_file(module_file, address_list)
 
     # step 3 : {thread_id->stack_list]}
-    stack_group_list = symbol_thread_backtrace(thread_id_to_backtrace_list, address_symbol)
+    stack_group_list = unify_thread_backtrace(thread_id_to_backtrace_list, address_symbol)
     return stack_group_list
 
 
@@ -52,6 +52,38 @@ def get_id_to_item(item):
         dict3 = get_id_to_item(i)
         dict2.update(dict3)
     return dict2
+
+
+def inside_file(xml_file):
+    tree = ET.parse(xml_file)
+    root = tree.getroot()
+    id_to_item = get_all_id_to_item(root)
+    tid_to_bid_to_wid = inside_stack(root)
+
+
+def inside_stack(root):
+    tid_to_bid_to_wid = {}
+    for c in root[0]:
+        if c.tag != 'row':
+            continue
+        thread_id, backtrace_id, weight_id = get_row_info(c)
+        if backtrace_id == 0:
+            print ('waring: no backtrace item', thread_id)
+            continue
+
+        if thread_id in tid_to_bid_to_wid.keys():
+            bid_dict = tid_to_bid_to_wid[thread_id]
+        else:
+            bid_dict = {}
+            tid_to_bid_to_wid[thread_id] = bid_dict
+
+        if backtrace_id in bid_dict.keys():
+            wid_list = bid_dict[backtrace_id]
+        else:
+            wid_list = []
+            bid_dict[backtrace_id] = wid_list
+        wid_list.append(weight_id)
+    return tid_to_bid_to_wid
 
 
 # # 相同backtrace_id weight聚合, 并解析backtrace_id
@@ -78,7 +110,7 @@ def group_stack_list_by_thread(root, id_to_item):
         else:
             address_list = get_backtrace_by_id(backtrace_id, id_to_item)
             address_list.insert(0, thread_name)
-            print 'insert thread name ', thread_name
+            #print 'insert thread name ', thread_name
             bt = Backtrace(backtrace_id, weight, address_list)
             backtrace_list[backtrace_id] = bt
         thread_id_to_stack_list[thread_id] = backtrace_list
@@ -123,7 +155,7 @@ def get_backtrace_by_id(backtrace_id, id_to_item):
                 for frame in frames:
                     tmp = int(frame)
                     if tmp == 0:
-                        print ("error", frame, j.text)
+                        print ("waring: filter invalid frame ", frame, j.text)
                         continue
                     address = hex(int(frame))
                     address_list.append(address)
@@ -144,11 +176,11 @@ def get_thread_name(thread_id, id_to_item):
     return thread_name
 
 
-def symbol_thread_backtrace(thread_id_to_backtrace_list, address_symbol):
+def unify_thread_backtrace(thread_id_to_backtrace_list, address_symbol):
     stack_group_dict = {}
-    for (thread_id, stacK_list) in thread_id_to_backtrace_list.items():
+    for (thread_id, stacK_dict) in thread_id_to_backtrace_list.items():
         std_stack_list = []
-        for (backtrace_id, bt) in stacK_list.items():
+        for (backtrace_id, bt) in stacK_dict.items():
             std_stack = get_std_stack(bt, address_symbol)
             std_stack_list.append(std_stack)
         stack_group_dict[thread_id] = std_stack_list

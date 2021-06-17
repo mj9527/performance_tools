@@ -1,9 +1,9 @@
 # coding=utf-8
 import datetime
 import stack_tree
-import stack_printer
-import stack_ui
-import setting
+import stack_json
+import stack_txt
+import stack_graph
 
 
 def start_play(std_stack_list, output_dir):
@@ -12,14 +12,14 @@ def start_play(std_stack_list, output_dir):
 
     stack_collapse_list = stack_tree.collapse_stack(std_stack_list)
 
-    json_data = stack_printer.get_json_data(stack_collapse_list)
+    json_file = prefix + '.json'
+    stack_json.get_json_file(stack_collapse_list, json_file)
 
-    stack_ui.display_stack(json_data, prefix)
+    txt_file = prefix + '.txt'
+    stack_txt.get_txt_file(stack_collapse_list, txt_file)
 
+    flame_file = prefix + "_flame.html"
+    stack_graph.get_flame_graph(json_file, flame_file)
 
-if __name__ == "__main__":
-    file_name = setting.input_memory_file
-    output_dir = setting.output_memory_dir
-    #json_parser(file_name, output_dir)
-
-
+    sunburst_file = prefix + "_sunburst.html"
+    stack_graph.get_sunburst_graph(json_file, sunburst_file)

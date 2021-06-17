@@ -28,7 +28,6 @@ def collapse_stack_group_list(stack_group_list):
         root = base_def.TreeNode(None)
         collapse_stack_group(root, stack_group)
         stack_collapse_list.append(root)
-    #root.data = root.child_list[0].data
     return stack_collapse_list
 
 

@@ -7,7 +7,7 @@ def show_memory_dic(module_to_size, output_dir):
     attr_list = []
     value_list = []
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
-    output_file = output_dir + current_time + '_memory_info.html'
+    output_file = output_dir + current_time + '_memory_pie.html'
     for key, value in module_to_size.items():
         attr_list.append(key)
         value_list.append(value)

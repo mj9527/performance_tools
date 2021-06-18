@@ -3,7 +3,7 @@ import record_windows
 import etl_parser
 import setting
 import os
-import flame_graph
+import stack_graph
 
 
 def cap_dump_json():
@@ -17,8 +17,8 @@ def cap_dump_json():
 
     flame_file = prefix + "_flame.html"
     sunburst_file = prefix + "_sunburst.html"
-    flame_graph.get_sunburstgraph_from_json(json_file, sunburst_file)
-    flame_graph.get_flamegrap_from_json(json_file, flame_file)
+    stack_graph.get_sunburstgraph_from_json(json_file, sunburst_file)
+    stack_graph.get_flamegrap_from_json(json_file, flame_file)
     return json_file
 
 

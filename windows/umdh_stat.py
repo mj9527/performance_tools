@@ -5,6 +5,7 @@ sys.path.append("..")
 import setting
 import umdh_pie
 import umdh_file_parser
+import datetime
 
 
 def get_stack_module(stack_module_list, define_module_list):
@@ -62,20 +63,46 @@ def print_module_to_size(module_to_size):
     print 'alloc size', total_sz / 1024 / 1024
 
 
-def statistics_stack_list(std_stack_list, output_dir):
+def statistics_stack_list(std_stack_list, prefix):
     module_to_size = {}
+    module_to_func_list = {}
     for std_stack in std_stack_list:
         get_module_alloc_size(std_stack, module_to_size)
-    print_module_to_size(module_to_size)
+        get_module_fun_list(std_stack, module_to_func_list)
+    printf_module_func_list(module_to_func_list, prefix)
+    #print_module_to_size(module_to_size)
 
     module_ls = sorted(module_to_size.items(), key=lambda kv: (kv[1], kv[0]))
     print_module_list(module_ls)
 
-    umdh_pie.show_memory_dic(module_to_size, output_dir)
+    umdh_pie.show_memory_dic(module_to_size, prefix)
+
+
+def get_module_fun_list(std_stack, module_to_func_list):
+    for frame in std_stack.frame_list:
+        if frame.module not in module_to_func_list:
+            module_to_func_list[frame.module] = [frame.func_name]
+        else:
+            func_list = module_to_func_list[frame.module]
+            if frame.func_name not in func_list:
+                func_list.append(frame.func_name)
+
+
+def printf_module_func_list(module_to_func_list, prefix):
+    file_name = prefix + '_func_list.txt'
+    with open(file_name, "w") as f:
+        for module, func_list in module_to_func_list.items():
+            func_list.sort()
+            for func in func_list:
+                line = module + ' ' + func + '\n'
+                f.write(line)
+        f.close()
 
 
 if __name__ == "__main__":
     file_name = setting.input_memory_file
     output_dir = setting.output_memory_dir
     std_stack_list = umdh_file_parser.get_std_stack_list(file_name)
-    statistics_stack_list(std_stack_list, output_dir)
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
+    prefix = output_dir + current_time
+    statistics_stack_list(std_stack_list, prefix)

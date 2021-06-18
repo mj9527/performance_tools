@@ -1,20 +1,23 @@
 # coding=utf-8
 from pyecharts import Pie
+from pyecharts import Bar
 import datetime
 
 
-def show_memory_dic(module_to_size, output_dir):
+def show_memory_dic(module_to_size, prefix):
     attr_list = []
     value_list = []
-    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
-    output_file = output_dir + current_time + '_memory_pie.html'
     for key, value in module_to_size.items():
         attr_list.append(key)
         value_list.append(value)
-    show_memory(attr_list, value_list, output_file)
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
+    pie_file = prefix + '_pie.html'
+    show_pie(attr_list, value_list, pie_file)
+    bar_file = prefix + '_bar.html'
+    show_bar(attr_list, value_list, bar_file)
 
 
-def show_memory(attr_list, value_list, output_file):
+def show_pie(attr_list, value_list, output_file):
     pie = Pie(width='1000px', height='600px')
     pie.add(
         "",
@@ -26,6 +29,15 @@ def show_memory(attr_list, value_list, output_file):
         center=["50%", "60%"]
     )
     pie.render(path=output_file)
+
+
+def show_bar(attr_list, value_list, output_file):
+    bar = Bar()
+    bar.add('',  # label
+            attr_list,  # 横坐标
+            value_list,  # 纵坐标
+            is_more_utils=True)  # 设置最右侧工具栏
+    bar.render(output_file)
 
 
 if __name__ == "__main__":

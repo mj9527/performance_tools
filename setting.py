@@ -53,7 +53,7 @@ wpt_dir = 'C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/'
 #memory setting
 input_memory_file = '//Users/mjzheng/Downloads/memory/213_bak/diff.txt'
 output_memory_dir = '/Users/mjzheng/Downloads/memory/213_bak/'
-business_module_list = ['wemeet_app_sdk', 'wemeet', 'wemeet_framework_common', 'wemeetapp', 'imsdk', 'xnn', 'xcast']
+business_module_list = ['wemeet_framework', 'wemeet_module_api', 'imsdk', 'xnn', 'wemeetapp', 'wemeet_sdk', 'wemeet_app_sdk', 'wemeet_base', 'wemeet', 'libYTFaceTracker', 'xcast', 'wemeet_framework_common']
 base_module_list = ['GF']
 
 

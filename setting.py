@@ -8,6 +8,7 @@ os_type = 'ios'
 
 # apple public
 template = 'Time Profiler'
+#template = 'Leaks'
 
 # ios setting
 # mj-6s

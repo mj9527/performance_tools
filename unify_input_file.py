@@ -1,10 +1,10 @@
 # coding=utf-8
 
 
-def write_perf(thread_to_stack_list, save_path):
+def write_perf(std_stack_list, save_path):
     j = 1
     with open(save_path, "w") as f:
-        for start_func, thread_stack_list in thread_to_stack_list.items():
+        for start_func, thread_stack_list in std_stack_list.items():
             for thread_stack in thread_stack_list:
                 thread_name = str(j) + "    " + str(j) + "    " + str(thread_stack.alloc_size) + ":   " + str(thread_stack.alloc_size) + " cpu-clock:\n"
                 f.write(thread_name)
@@ -20,10 +20,10 @@ def write_perf(thread_to_stack_list, save_path):
         f.close()
 
 
-def write_memory_perf(thread_to_stack_list, save_path):
+def write_memory_perf(std_stack_list, save_path):
     j = 1
     with open(save_path, "w") as f:
-        for start_func, thread_stack_list in thread_to_stack_list.items():
+        for start_func, thread_stack_list in std_stack_list.items():
             for thread_stack in thread_stack_list:
                 #thread_name = str(j) + "    " + str(j) + "    " + str(thread_stack.alloc_size) + ":   " + str(thread_stack.alloc_size) + " cpu-clock:\n"
                 #f.write(thread_name)
@@ -38,3 +38,17 @@ def write_memory_perf(thread_to_stack_list, save_path):
                 f.write('\n')
             j = j+1
         f.close()
+
+
+def write_stack_file(std_stack_list, save_path):
+    with open(save_path, "w") as f:
+        for stack_id, std_stack in enumerate(std_stack_list):
+            thread_name = str(stack_id) + "    " + str(stack_id) + "    " + str(std_stack.weight) + ":   " + str(std_stack.weight) + " cpu-clock:\n"
+            f.write(thread_name)
+            for index, frame in enumerate(std_stack.frame_list):
+                frame = "       0 " + frame.func_name + ' ([' + frame.module + '])' + '\n'
+                f.write(frame)
+            f.write('\n')
+        f.close()
+
+

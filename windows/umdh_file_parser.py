@@ -126,12 +126,29 @@ def get_stack_list_from_file(file_name):
 
 
 def get_func_name(func_info):
-    pos = func_info.rfind(' (')
+    pos = func_info.find(' (')
     if pos != -1:
         func_name = func_info[0:pos]
     else:
         func_name = func_info
     func_name.strip()
+    # if func_name.find('"') != -1:
+    #     func_name = func_name.replace('"', '')
+    #     print 'find 1 ...................... ', func_name
+    # if func_name.find('?') != -1:
+    #     print 'find 2 ...................... ', func_name
+    #     func_name = func_name.replace('?', '')
+    #     print 'find 2 end ...................... ', func_name
+    # if func_name.find(u'\u0001') != -1:
+    #     print 'find XXXX', func_name
+    #     func_name = func_name.replace(u'\u0001', '')
+    # if func_name.find('`') != -1:
+    #     print 'find 3...................... ', func_name
+    #     func_name = func_name.replace('`', '')
+    # if func_name.find("'") != -1:
+    #     func_name = func_name.replace("'", '')
+    # if func_name.find('\\') != -1:
+    #     func_name = func_name.replace('\\', '')
     return func_name
 
 
@@ -145,8 +162,8 @@ def preproccess_stack(stack_list):
             parts = frame.split('!')
             module = parts[0].strip()
             func_info = parts[1].split(' ')
-            func_name = func_info[0]
-            #func_name = get_func_name(parts[1])
+            #func_name = func_info[0]
+            func_name = get_func_name(parts[1])
             address = func_name
             info = base_def.FrameInfo(index, address, func_name, module, weight)
             frame_list.append(info)

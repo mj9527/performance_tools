@@ -11,7 +11,7 @@ def collapse_stack(std_stack_list):
     stack_collapse_list = collapse_stack_group_list(stack_group_dict)
     stack_collapse_list.sort(key=take_weight)
     stack_collapse_list = stack_collapse_list[::-1]
-    print_collapse_stack_start_func(stack_collapse_list)
+    #print_collapse_stack_start_func(stack_collapse_list)
     return stack_collapse_list
 
 

@@ -56,6 +56,12 @@ output_memory_dir = '/Users/mjzheng/Downloads/memory/213_bak/'
 business_module_list = ['wemeet_framework', 'wemeet_module_api', 'imsdk', 'xnn', 'wemeetapp', 'wemeet_sdk', 'wemeet_app_sdk', 'wemeet', 'libYTFaceTracker', 'xcast', 'wemeet_framework_common']
 base_module_list = ['GF']
 
+priority_module_list = [
+    ['libYTFaceTracker', 'xcast', 'imsdk', 'imsdk'],
+    ['wemeet_framework', 'wemeet_module_api', 'wemeetapp', 'wemeet_sdk', 'wemeet_app_sdk', 'wemeet', 'wemeet_framework_common'],
+    ['GF']
+]
+
 module_to_start_func_ls = {
     'xcast': ['xc_cell_cycle_start', 'cycle_once', 'async_start', 'fire_event', 'task_run',
               'xc_signal_fire', 'xc_cell_fire_signal', 'thread_start', 'timer_node_run', 'timer_proc',

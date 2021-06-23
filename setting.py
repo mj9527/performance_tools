@@ -2,8 +2,7 @@
 
 # public
 run_time = 60  # 测试时间单位s
-#os_type = 'ios_std'
-os_type = 'ios_std'
+os_type = 'ios'
 #os_type = 'windows'
 
 # apple public

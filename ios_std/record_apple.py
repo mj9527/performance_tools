@@ -63,8 +63,8 @@ def record_mac_with_config(prefix):
 
 
 def record_apple_config(prefix):
-    if setting.os_type == 'ios_std':
-        print ('record ios_std')
+    if setting.os_type == 'ios':
+        print ('record ios')
         trace_file, ret = record_ios_with_config(prefix)
         return trace_file, ret
     else:

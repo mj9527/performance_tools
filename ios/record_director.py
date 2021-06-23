@@ -5,8 +5,8 @@ import time_profile_parser
 import sys
 sys.path.append("..")
 import base_utils
-import stack_director
-import unify_input_file
+from stack_common import stack_director
+from stack_common import unify_input_file
 
 
 def start():

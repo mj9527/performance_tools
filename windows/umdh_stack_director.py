@@ -3,7 +3,7 @@ import sys
 sys.path.append("../")
 
 import setting
-import stack_director
+from stack_common import stack_director
 import umdh_file_parser
 import datetime
 import umdh_stat

@@ -2,15 +2,15 @@
 
 # public
 run_time = 60  # 测试时间单位s
-#os_type = 'ios'
-os_type = 'ios'
+#os_type = 'ios_std'
+os_type = 'ios_std'
 #os_type = 'windows'
 
 # apple public
 template = 'Time Profiler'
 #template = 'Leaks'
 
-# ios setting
+# ios_std setting
 # mj-6s
 ios_uuid = '6daac09469e94a24a2fa1f684bcd57963fd29c25'  # iOS被测主机udid 没有则不填
 

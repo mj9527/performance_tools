@@ -4,11 +4,27 @@ import stack_tree
 import stack_json
 import stack_txt
 import stack_graph
+import unify_input_file
+
+
+def take_four(elem):
+    return elem.weight
+
+
+def sort_stack_list(std_stack_list):
+    std_stack_list.sort(key=take_four)
+    std_stack_list = std_stack_list[::-1]
+    return std_stack_list
 
 
 def start_play(std_stack_list, prefix):
+    sort_file = prefix + '_sort.txt'
+    std_stack_list = sort_stack_list(std_stack_list)
+    unify_input_file.write_stack_file(std_stack_list, sort_file)
+
     stack_collapse_list = stack_tree.collapse_stack(std_stack_list)
     generate_graph(stack_collapse_list, prefix)
+    return std_stack_list
 
 
 def start_play2(stack_group_dict, prefix):

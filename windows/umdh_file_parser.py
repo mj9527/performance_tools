@@ -66,15 +66,9 @@ def parse_module(file_name):
     f.close()
 
 
-def take_four(elem):
-    return elem.weight
-
-
 def get_std_stack_list(file_name):
     stack_list = get_stack_list_from_file(file_name)
     std_stack_list = preproccess_stack(stack_list)
-    std_stack_list.sort(key=take_four)
-    std_stack_list = std_stack_list[::-1]
     return std_stack_list
 
 
@@ -161,7 +155,7 @@ def preproccess_stack(stack_list):
         for index, frame in enumerate(thread_stack.frames[::-1]):
             parts = frame.split('!')
             module = parts[0].strip()
-            func_info = parts[1].split(' ')
+            #func_info = parts[1].split(' ')
             #func_name = func_info[0]
             func_name = get_func_name(parts[1])
             address = func_name

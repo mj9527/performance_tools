@@ -11,7 +11,7 @@ def get_json_file(stack_collapse_list, file_name):
 def get_json_data(stack_collapse_list):
     threads = []
     for index, root in enumerate(stack_collapse_list):
-        frame = scan_tree_postorder_dfs(root.child_list[0])
+        frame = scan_tree_postorder_dfs(root)
         child_list = [frame]
         thread = {"threadID": index+1, "func": child_list}
         threads.append(thread)

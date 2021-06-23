@@ -50,5 +50,3 @@ def write_stack_file(std_stack_list, save_path):
                 f.write(frame)
             f.write('\n')
         f.close()
-
-

@@ -7,6 +7,7 @@ import umdh_pie
 import umdh_file_parser
 import datetime
 import unify_input_file
+import base_utils
 
 
 def get_stack_module(std_stack, define_module_list):
@@ -35,70 +36,132 @@ def get_valid_stack_module(std_stack):
 def get_module_alloc_size(std_stack, module_to_size):
     frame = get_valid_stack_module(std_stack)
     if frame is None:
-        print 'error...........'
+        print 'unexpect error : failed to get module frame'
         return
 
     stack_module = frame.module
-    if stack_module == '<no module>':
-        print 'error'
-
-    if stack_module == "":
-        print ('not find business module')
+    if stack_module == '<no module>' or stack_module == "":
+        print 'unexpect error : failed to get module name'
+        return
 
     if stack_module not in module_to_size:
         module_to_size[stack_module] = std_stack.weight
     else:
-        old_size = module_to_size[stack_module]
-        new_size = old_size + std_stack.weight
-        module_to_size[stack_module] = new_size
+        module_to_size[stack_module] += std_stack.weight
 
 
-def print_module_list(module_list):
-    for module in module_list:
-        print (module)
+def print_module_alloc_size(module_to_size, prefix):
+    module_ls = sorted(module_to_size.items(), key=lambda kv: (kv[1], kv[0]))
+    module_ls = module_ls[::-1]
+    file_name = prefix + '_module_size_desc.txt'
+    with open(file_name, "w") as f:
+        for module in module_ls:
+            f.write(str(module[0]) + '\t' + str(module[1]) + '\n')
+            #print 'module alloc size: ', module
 
 
-def print_module_to_size(module_to_size):
-    total_sz = 0
-    for key, value in module_to_size.items():
-        total_sz += value
-    print 'alloc size', total_sz / 1024 / 1024
+def statistics_module_size(std_stack_list, prefix):
+    module_to_size = {}
+    for std_stack in std_stack_list:
+        get_module_alloc_size(std_stack, module_to_size)
+    print_module_alloc_size(module_to_size, prefix)
+    umdh_pie.show_kv_pie(module_to_size, prefix)
 
 
 def statistics_stack_list(std_stack_list, prefix):
-    module_to_size = {}
-    module_to_func_list = {}
+    statistics_module_size(std_stack_list, prefix)
+    statistics_start_func_size(std_stack_list, prefix)
+
+
+def statistics_start_func_size(std_stack_list, prefix):
+    module_to_func_dict = {}
     for std_stack in std_stack_list:
-        get_module_alloc_size(std_stack, module_to_size)
-        get_module_start_func(std_stack, module_to_func_list)
-    print_moduel_start_func(module_to_func_list)
-    #print_module_to_size(module_to_size)
-
-    module_ls = sorted(module_to_size.items(), key=lambda kv: (kv[1], kv[0]))
-    print_module_list(module_ls)
-
-    umdh_pie.show_memory_dic(module_to_size, prefix)
+        get_start_func_size(std_stack, module_to_func_dict)
+    tmp_dict = merge_func(module_to_func_dict)
+    print_start_func_size(tmp_dict, prefix)
 
 
-def get_module_fun_list(std_stack, module_to_func_list):
-    for frame in std_stack.frame_list:
-        if frame.module not in module_to_func_list:
-            module_to_func_list[frame.module] = [frame.func_name]
+def get_start_func_size(std_stack, module_to_func_dict):
+    origin_frame = get_valid_stack_module(std_stack)
+    if origin_frame is None:
+        print 'unexpect error : failed to get module frame'
+        return
+
+    stack_module = origin_frame.module
+    if stack_module == '<no module>' or stack_module == "":
+        print 'unexpect error : failed to get module name'
+        return
+
+    adjust_frame = get_valid_start_func(std_stack, stack_module)
+    if adjust_frame is None:
+        adjust_frame = origin_frame
+
+    func_name = adjust_frame.func_name
+    if stack_module not in module_to_func_dict:
+        func_to_weight = {func_name: std_stack.weight}
+        module_to_func_dict[stack_module] = func_to_weight
+    else:
+        func_to_weight = module_to_func_dict[stack_module]
+        if func_name not in func_to_weight:
+            func_to_weight[func_name] = std_stack.weight
         else:
-            func_list = module_to_func_list[frame.module]
-            if frame.func_name not in func_list:
-                func_list.append(frame.func_name)
+            func_to_weight[func_name] += std_stack.weight
 
 
-def printf_module_func_list(module_to_func_list, prefix):
-    file_name = prefix + '_func_list.txt'
-    with open(file_name, "w") as f:
-        for module, func_list in module_to_func_list.items():
-            func_list.sort()
-            for func in func_list:
-                line = module + ' ' + func + '\n'
-                f.write(line)
-        f.close()
+def print_start_func_size(module_to_func_list, prefix):
+    module_dir = prefix + '/module/'
+    base_utils.mkdir(module_dir)
+    for module, func_dict in module_to_func_list.items():
+        module_prefix = module_dir + module
+        func_dict_ret = merge_top_func(module, func_dict)
+        umdh_pie.show_kv_pie(func_dict_ret, module_prefix)
+
+
+def merge_top_func(module, func_dict):
+    func_ls = sorted(func_dict.items(), key=lambda kv: (kv[1], kv[0]))
+    func_ls = func_ls[::-1]
+    func_dict_ret = {}
+    for index, func in enumerate(func_ls):
+        print module, func
+        if index <= setting.top_func_size:
+            func_dict_ret[func[0]] = func[1]
+        else:
+            if 'other' not in func_dict_ret:
+                func_dict_ret['other'] = func[1]
+            else:
+                func_dict_ret['other'] += func[1]
+    return func_dict_ret
+
+
+def merge_func(module_to_func_list):
+    tmp_dict = {}
+    for module, func_dict in module_to_func_list.items():
+        for func, weight in func_dict.items():
+            parts = func.split('+')
+            func_name = parts[0]
+            #print func_name
+            if module not in tmp_dict:
+                func_to_weight = {func_name: weight}
+                tmp_dict[module] = func_to_weight
+            else:
+                func_to_weight = tmp_dict[module]
+                if func_name not in func_to_weight:
+                    func_to_weight[func_name] = weight
+                else:
+                    func_to_weight[func_name] += weight
+    return tmp_dict
+
+
+def get_valid_start_func(std_stack, module):
+    if module not in setting.module_to_start_func_ls:
+        return None
+    block_list = setting.module_to_start_func_ls[module]
+    if block_list is None or len(block_list) == 0:
+        return None
+    for frame in std_stack.frame_list:
+        if frame.module == module and not match_func(frame.func_name, block_list):
+            return frame
+    return None
 
 
 def match_func(func_name, block_list):
@@ -108,70 +171,30 @@ def match_func(func_name, block_list):
     return False
 
 
-def get_valid_func_module(std_stack, module):
-    if module not in setting.module_start_func:
-        return None
-    block_list = setting.module_start_func[module]
-    if len(block_list) == 0:
-        return None
-    for frame in std_stack.frame_list:
-        if frame.module == module and not match_func(frame.func_name, block_list):
-            return frame
-    return None
-
-
-def get_module_start_func(std_stack, module_to_func_list):
-    frame = get_valid_stack_module(std_stack)
-    if frame is None:
-        print 'error...........'
-        return
-
-    stack_module = frame.module
-    if stack_module == '<no module>':
-        print 'error'
-
-    if stack_module == "":
-        print ('not find business module')
-
-    func_name = frame.func_name
-    func_frame = get_valid_func_module(std_stack, stack_module)
-    if func_frame is not None:
-        func_name = func_frame.func_name
-
-    if stack_module not in module_to_func_list:
-        func_to_dict = {func_name: std_stack.weight}
-        module_to_func_list[stack_module] = func_to_dict
-    else:
-        func_to_dict = module_to_func_list[stack_module]
-        if func_name not in func_to_dict:
-            func_to_dict[func_name] = std_stack.weight
-        else:
-            total_weight = func_to_dict[func_name]
-            total_weight += std_stack.weight
-            func_to_dict[func_name] = total_weight
-
-
-def print_moduel_start_func(module_to_func_list):
-    for module, func_dict in module_to_func_list.items():
-        func_ls = sorted(func_dict.items(), key=lambda kv: (kv[1], kv[0]))
-        func_ls = func_ls[::-1]
-        for func in func_ls:
-            if module == 'xcast':
-                print module, func
-
-
+# def get_module_fun_list(std_stack, module_to_func_list):
+#     for frame in std_stack.frame_list:
+#         if frame.module not in module_to_func_list:
+#             module_to_func_list[frame.module] = [frame.func_name]
+#         else:
+#             func_list = module_to_func_list[frame.module]
+#             if frame.func_name not in func_list:
+#                 func_list.append(frame.func_name)
+#
+#
+# def printf_module_func_list(module_to_func_list, prefix):
+#     file_name = prefix + '_func_list.txt'
+#     with open(file_name, "w") as f:
+#         for module, func_list in module_to_func_list.items():
+#             func_list.sort()
+#             for func in func_list:
+#                 line = module + ' ' + func + '\n'
+#                 f.write(line)
+#         f.close()
 if __name__ == "__main__":
     file_name = setting.input_memory_file
     output_dir = setting.output_memory_dir
-    std_stack_list = umdh_file_parser.get_std_stack_list(file_name)
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
     prefix = output_dir + current_time
-    top_file = prefix + '_top.txt'
-    unify_input_file.write_stack_file(std_stack_list, top_file)
+
+    std_stack_list = umdh_file_parser.get_std_stack_list(file_name)
     statistics_stack_list(std_stack_list, prefix)
-    # block_list = setting.module_start_func['xcast']
-    # func_name = 'fire_event+48'
-    # if not match_func(func_name, block_list):
-    #     print 'no found'
-    # else:
-    #     print 'found'

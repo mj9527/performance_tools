@@ -53,15 +53,17 @@ wpt_dir = 'C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/'
 #memory setting
 input_memory_file = '//Users/mjzheng/Downloads/memory/213_bak/diff.txt'
 output_memory_dir = '/Users/mjzheng/Downloads/memory/213_bak/'
-business_module_list = ['wemeet_framework', 'wemeet_module_api', 'imsdk', 'xnn', 'wemeetapp', 'wemeet_sdk', 'wemeet_app_sdk', 'wemeet_base', 'wemeet', 'libYTFaceTracker', 'xcast', 'wemeet_framework_common']
+business_module_list = ['wemeet_framework', 'wemeet_module_api', 'imsdk', 'xnn', 'wemeetapp', 'wemeet_sdk', 'wemeet_app_sdk', 'wemeet', 'libYTFaceTracker', 'xcast', 'wemeet_framework_common']
 base_module_list = ['GF']
 
-module_start_func = {
+module_to_start_func_ls = {
     'xcast': ['xc_cell_cycle_start', 'cycle_once', 'async_start', 'fire_event', 'task_run',
               'xc_signal_fire', 'xc_cell_fire_signal', 'thread_start', 'timer_node_run', 'timer_proc',
-              'cycle_task', 'anonymous', 'xc_thread_proc', 'worker_proc', 'uv_run', 'worker_thread_proc',
-              'xcast_execute', 'xc_execute', 'xc_closure_run'],
+              'cycle_task', 'xc_thread_proc', 'worker_proc', 'uv_run', 'worker_thread_proc',
+              'xcast_execute', 'xc_execute', 'xc_closure_run', 'do_start', 'anonymous'],
+    'wemeet_sdk': ['_Do_call', 'lambda', 'operator()'],
 }
+top_func_size = 10
 
 
 

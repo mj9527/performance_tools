@@ -12,7 +12,7 @@ def get_txt_data(stack_collapse_list):
     threads = []
     for index, root in enumerate(stack_collapse_list):
         frame_list = []
-        scan_tree_preorder_dfs(root.child_list[0], frame_list)
+        scan_tree_preorder_dfs(root, frame_list)
         threads.append(frame_list)
     return threads
 
@@ -30,6 +30,7 @@ def get_frame_txt_data(origin_frame):
     for i in range(origin_frame.index):
         frame_info += ' '
     frame_info += str(origin_frame.index) + ' '
+    frame_info += origin_frame.module + ' '
     frame_info += origin_frame.func_name
     frame_info += ' ' + str(origin_frame.all_weight)
     return frame_info

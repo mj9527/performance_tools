@@ -2,10 +2,23 @@
 import base_def
 
 
+def take_weight(elem):
+    return elem.data.all_weight
+
+
 def collapse_stack(std_stack_list):
     stack_group_dict = group_stack(std_stack_list)
     stack_collapse_list = collapse_stack_group_list(stack_group_dict)
+    stack_collapse_list.sort(key=take_weight)
+    stack_collapse_list = stack_collapse_list[::-1]
+    print_collapse_stack_start_func(stack_collapse_list)
     return stack_collapse_list
+
+
+def print_collapse_stack_start_func(stack_collapse_list):
+    for root in stack_collapse_list:
+        if root.data.module == 'xcast':
+            print 'collpase top frame ', root.data.module, '', root.data.func_name
 
 
 def group_stack(std_stack_list):
@@ -27,7 +40,7 @@ def collapse_stack_group_list(stack_group_list):
     for start_func, stack_group in stack_group_list.items():
         root = base_def.TreeNode(None)
         collapse_stack_group(root, stack_group)
-        stack_collapse_list.append(root)
+        stack_collapse_list.append(root.child_list[0])
     return stack_collapse_list
 
 

@@ -4,17 +4,16 @@ from pyecharts import Bar
 import datetime
 
 
-def show_memory_dic(module_to_size, prefix):
+def show_kv_pie(kv, prefix):
     attr_list = []
     value_list = []
-    for key, value in module_to_size.items():
+    for key, value in kv.items():
         attr_list.append(key)
         value_list.append(value)
-    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
     pie_file = prefix + '_pie.html'
     show_pie(attr_list, value_list, pie_file)
-    bar_file = prefix + '_bar.html'
-    show_bar(attr_list, value_list, bar_file)
+    # bar_file = prefix + '_bar.html'
+    # show_bar(attr_list, value_list, bar_file)
 
 
 def show_pie(attr_list, value_list, output_file):

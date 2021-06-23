@@ -38,8 +38,8 @@ def umdh_stack_parser(file_name, output_dir):
     #std_stack_list = search(std_stack_list)
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
     prefix = output_dir + current_time
-    stack_director.start_play(std_stack_list, prefix)
-    #umdh_stat.statistics_stack_list(std_stack_list, prefix)
+    std_stack_list = stack_director.start_play(std_stack_list, prefix)
+    umdh_stat.statistics_stack_list(std_stack_list, prefix)
 
 
 if __name__ == "__main__":

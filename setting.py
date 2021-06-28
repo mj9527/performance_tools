@@ -8,8 +8,8 @@ OS_TYPE = 'ios'
 INSTRUMENT_TEMPLATE = 'Time Profiler'
 
 # ios_std setting
-#IOS_UUID = '6daac09469e94a24a2fa1f684bcd57963fd29c25'  # mj-6s uuid
-IOS_UUID = 'dfd530239e7e340e3874371707fbc71b0a04efb9'  # ipad4
+IOS_UUID = '6daac09469e94a24a2fa1f684bcd57963fd29c25'  # mj-6s uuid
+#IOS_UUID = 'dfd530239e7e340e3874371707fbc71b0a04efb9'  # ipad4
 
 IOS_BUNDLE_ID = '腾讯会议'
 IOS_OUTPUT_DIR = '/Users/mjzheng/Downloads/ios_data/'

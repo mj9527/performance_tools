@@ -44,27 +44,23 @@ def record(uuid, pid, template, interval, file_name):
     return 0
 
 
-def record_apple_with_config(uuid, bundle_id, template, interval, prefix):
+def record_apple_config(prefix):
+    if setting.OS_TYPE == 'ios':
+        print ('record ios')
+        uuid = setting.IOS_UUID
+        bundle_id = setting.IOS_BUNDLE_ID
+    else:
+        uuid = setting.MAC_UUID
+        bundle_id = setting.MAC_BUNDLE_ID
+    template = setting.INSTRUMENT_TEMPLATE
+    interval = setting.RUN_TIME * 1000
+
     trace_file = prefix + '.trace'
     pid = get_pid(bundle_id)
     ret = record(uuid, pid, template, interval, trace_file)
     module_file = prefix + '.log'
     record_modules.export_module_to_file(pid, module_file)
     return trace_file, ret
-
-
-def record_apple_config(prefix):
-    if setting.OS_TYPE == 'ios':
-        print ('record ios')
-        uuid = setting.IOS_UUID
-        bundle_id = setting.IOS_BUNDLE_ID
-
-    else:
-        uuid = setting.MAC_UUID
-        bundle_id = setting.MAC_BUNDLE_ID
-    template = setting.INSTRUMENT_TEMPLATE
-    interval = setting.RUN_TIME * 1000
-    return record_apple_with_config(uuid, bundle_id, template, interval, prefix)
 
 
 if __name__ == "__main__":

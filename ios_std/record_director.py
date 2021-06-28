@@ -26,8 +26,6 @@ def start():
     # time_file = prefix + '_time-profile.xml'
 
     std_stack_list = time_profile_parser.parse_time_profile(time_file, prefix)
-    stack_file = prefix + '.stack'
-    unify_input_file.write_stack_file(std_stack_list, stack_file)
     stack_director.start_play(std_stack_list, prefix)
 
 

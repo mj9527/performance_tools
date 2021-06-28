@@ -7,8 +7,7 @@ import base_utils
 import record_modules
 
 
-def get_pid(bundle_id):
-    sync_cmd = r'frida-ps -Ua'
+def get_pid(sync_cmd, bundle_id):
     print ('start get pid')
     print (sync_cmd)
     child = subprocess.Popen(sync_cmd, shell=True, stdout=subprocess.PIPE)
@@ -47,16 +46,18 @@ def record(uuid, pid, template, interval, file_name):
 def record_apple_config(prefix):
     if setting.OS_TYPE == 'ios':
         print ('record ios')
+        sync_cmd = r'frida-ps -Ua'
         uuid = setting.IOS_UUID
         bundle_id = setting.IOS_BUNDLE_ID
     else:
+        sync_cmd = r'frida-ps'
         uuid = setting.MAC_UUID
         bundle_id = setting.MAC_BUNDLE_ID
     template = setting.INSTRUMENT_TEMPLATE
     interval = setting.RUN_TIME * 1000
 
     trace_file = prefix + '.trace'
-    pid = get_pid(bundle_id)
+    pid = get_pid(sync_cmd, bundle_id)
     ret = record(uuid, pid, template, interval, trace_file)
     module_file = prefix + '.log'
     record_modules.export_module_to_file(pid, module_file)

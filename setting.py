@@ -2,7 +2,7 @@
 
 # public
 RUN_TIME = 60  # 测试时间单位s
-OS_TYPE = 'ios'
+OS_TYPE = 'osx'
 
 # apple public
 INSTRUMENT_TEMPLATE = 'Time Profiler'

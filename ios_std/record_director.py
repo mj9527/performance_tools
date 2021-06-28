@@ -6,7 +6,6 @@ import content_parser
 import time_profile_parser
 import base_utils
 from stack_common import stack_director
-from stack_common import unify_input_file
 
 
 def start():

@@ -186,24 +186,6 @@ def unify_thread_backtrace(thread_id_to_backtrace_list, address_symbol):
     return std_stack_list
 
 
-def binary_search(std_stack_list, start_index, end_index):
-    print len(std_stack_list), start_index, end_index, '.....'
-    return std_stack_list[start_index:end_index]
-    # start_index = 278
-    # end_index = 279
-    # std_stack_list = binary_search(stack_group_list,start_index, end_index)
-    # print len(std_stack_list), '......'
-    #
-    # # step 4:
-    # for std_stack in std_stack_list:
-    #     start_index = 47
-    #     end_index = 55
-    #     for index, frame in enumerate(std_stack.frame_list):
-    #         if index >= xx_index:
-    #             frame.func_name = frame.address
-    # return std_stack_list
-
-
 def get_std_stack(bt, address_symbol):
     frame_list = []
     for index, address in enumerate(bt.address_list):

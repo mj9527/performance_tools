@@ -32,8 +32,8 @@ def get_sunburst_graph(file_name, html_file):
 
 if __name__ == '__main__':
     PREFIX = "/Users/mjzheng/Downloads/ios_data/2021-03-30_19_27_05/2021-03-30_19_27_05"
-    JSON_FILE = prefix + ".json"
-    FLAME_FILE = prefix + "_flame.html"
-    SUNBURST_FILE = prefix + "_sunburst.html"
+    JSON_FILE = PREFIX + ".json"
+    FLAME_FILE = PREFIX + "_flame.html"
+    SUNBURST_FILE = PREFIX + "_sunburst.html"
     get_flame_graph(JSON_FILE, SUNBURST_FILE)
     get_sunburst_graph(JSON_FILE, FLAME_FILE)

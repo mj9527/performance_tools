@@ -5,7 +5,7 @@ sys.path.append("../")
 import setting
 from stack_common import stack_director
 import umdh_file_parser
-import datetime
+import base_utils
 
 
 def binary_search(std_stack_list, start_index, end_index):
@@ -33,10 +33,7 @@ def search_frame(std_stack, end_index):
 def umdh_stack_parser(file_name, output_dir):
     std_stack_list = umdh_file_parser.get_std_stack_list(file_name)
     print 'all stack len ', len(std_stack_list)
-
-    #std_stack_list = search(std_stack_list)
-    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
-    prefix = output_dir + current_time
+    _, prefix = base_utils.get_work_dir_and_prefix(output_dir)
     stack_director.start_play(std_stack_list, prefix)
 
 

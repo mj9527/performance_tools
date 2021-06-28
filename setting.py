@@ -3,30 +3,23 @@
 # public
 RUN_TIME = 60  # 测试时间单位s
 OS_TYPE = 'ios'
-#os_type = 'windows'
 
 # apple public
 INSTRUMENT_TEMPLATE = 'Time Profiler'
-#template = 'Leaks'
 
 # ios_std setting
-# mj-6s
-IOS_UUID = '6daac09469e94a24a2fa1f684bcd57963fd29c25'  # iOS被测主机udid 没有则不填
-
-# ipad
-#IOS_UUID = 'dfd530239e7e340e3874371707fbc71b0a04efb9'  # iOS被测主机udid 没有则不填
+IOS_UUID = '6daac09469e94a24a2fa1f684bcd57963fd29c25'  # mj-6s uuid
+#IOS_UUID = 'dfd530239e7e340e3874371707fbc71b0a04efb9'  # ipad4
 
 IOS_BUNDLE_ID = 'com.tencent.meeting'
 IOS_OUTPUT_DIR = '/Users/mjzheng/Downloads/ios_data/'
-SYMBOL_DIR = '/Users/mjzheng/Downloads/2.12.3.400/'
-SYBOL_PARSE = 1
-
 
 MAC_UUID = '117E51DA-23F9-59D7-88DF-90A4F3F402F4'
 MAC_BUNDLE_ID = '腾讯会议'
 MAC_OUTPUT_DIR = '/Users/mjzheng/Downloads/mac_data/'
 
-
+SYMBOL_DIR = '/Users/mjzheng/Downloads/2.12.3.400/'
+SYMBOL_PARSE = 1
 SYMBOL_DICT = {
     # 'xnn': symbol_dir,
     # 'WeMeetApp': symbol_dir,
@@ -41,16 +34,16 @@ SYMBOL_DICT = {
     '/usr/lib': '/Users/mjzheng/Library/Developer/Xcode/iOS DeviceSupport/14.1 (18A8395)/Symbols'
 }
 
-
 # windows setting
-# windows_output_dir = 'H:\\mj_git\\perf_data\\'
-# wpt_dir = 'C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\'
 WINDOWS_OUTPUT_DIR = 'H:/mj_git/perf_data/'
 WPT_DIR = 'C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/'
 
 #memory setting
-INPUT_MEMORY_FILE = '//Users/mjzheng/Downloads/memory/213_bak/diff.txt'
-OUTPUT_MEMORY_DIR = '/Users/mjzheng/Downloads/memory/213_bak/'
+WINDOWS_MEMORY_FILE = '//Users/mjzheng/Downloads/memory/213_bak/diff.txt'
+WINDOW_MEMORY_OUTPUT_DIR = '/Users/mjzheng/Downloads/memory/213_bak/'
+
+
+# MODULE
 BUSINESS_MODULE_LIST = ['wemeet_framework', 'wemeet_module_api', 'imsdk', 'xnn',
                         'wemeetapp', 'wemeet_sdk', 'wemeet_app_sdk', 'wemeet',
                         'libYTFaceTracker', 'xcast', 'wemeet_framework_common']

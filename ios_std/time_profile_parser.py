@@ -25,7 +25,7 @@ def parse_time_profile(xml_file, prefix):
 
     # step 2 : get symbol address
     address_symbol = {}
-    if setting.SYBOL_PARSE == 1:
+    if setting.SYMBOL_PARSE == 1:
         module_file = prefix + '.log'
         address_list = get_address_list(thread_id_to_backtrace_list)
         address_symbol = symbol_parser.symbol_with_file(module_file, address_list)

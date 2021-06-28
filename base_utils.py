@@ -27,7 +27,6 @@ def get_work_dir_and_prefix(output_dir):
 
 
 def get_work_dir_and_prefix_with_config():
-    origin_dir = ''
     if setting.OS_TYPE == 'ios':
         origin_dir = setting.IOS_OUTPUT_DIR
     elif setting.OS_TYPE == 'osx':

@@ -7,7 +7,8 @@ import base_utils
 import record_modules
 
 
-def get_pid(sync_cmd, bundle_id):
+def get_pid(bundle_id):
+    sync_cmd = r'frida-ps -Ua'
     print ('start get pid')
     print (sync_cmd)
     child = subprocess.Popen(sync_cmd, shell=True, stdout=subprocess.PIPE)
@@ -35,42 +36,37 @@ def record(uuid, pid, template, interval, file_name):
           " --device " + uuid + \
           " --time-limit " + str(interval) + "ms"
     print (cmd)
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-    for line in p.stdout.readlines():
+    child = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    stdout, _ = child.communicate()
+    lines = stdout.splitlines()
+    for line in lines:
         print (line.decode('utf-8'))
-    p.wait()
-    p.stdout.close()
     return 0
 
 
-def record_ios_with_config(prefix):
+def record_apple_with_config(uuid, bundle_id, template, interval, prefix):
     trace_file = prefix + '.trace'
-    sync_cmd = r'frida-ps -Ua'
-    pid = get_pid(sync_cmd, setting.IOS_BUNDLE_ID)
-    ret = record(setting.IOS_UUID, pid, setting.INSTRUMENT_TEMPLATE, setting.RUN_TIME * 1000, trace_file)
+    pid = get_pid(bundle_id)
+    ret = record(uuid, pid, template, interval, trace_file)
     module_file = prefix + '.log'
     record_modules.export_module_to_file(pid, module_file)
-    return trace_file, ret
-
-
-def record_mac_with_config(prefix):
-    trace_file = prefix + '.trace'
-    sync_cmd = r'frida-ps'
-    pid = get_pid(sync_cmd, setting.MAC_BUNDLE_ID)
-    ret = record(setting.MAC_UUID, pid, setting.INSTRUMENT_TEMPLATE, setting.RUN_TIME * 1000, trace_file)
     return trace_file, ret
 
 
 def record_apple_config(prefix):
     if setting.OS_TYPE == 'ios':
         print ('record ios')
-        trace_file, ret = record_ios_with_config(prefix)
-        return trace_file, ret
+        uuid = setting.IOS_UUID
+        bundle_id = setting.IOS_BUNDLE_ID
+
     else:
-        trace_file, ret = record_mac_with_config(prefix)
-        return trace_file, ret
+        uuid = setting.MAC_UUID
+        bundle_id = setting.MAC_BUNDLE_ID
+    template = setting.INSTRUMENT_TEMPLATE
+    interval = setting.RUN_TIME * 1000
+    return record_apple_with_config(uuid, bundle_id, template, interval, prefix)
 
 
 if __name__ == "__main__":
-    output_dir, prefix = base_utils.get_work_dir_and_prefix_with_config()
-    record_ios_with_config(prefix)
+    _, prefix = base_utils.get_work_dir_and_prefix_with_config()
+    record_apple_config(prefix)

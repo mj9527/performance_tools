@@ -1,7 +1,6 @@
 # coding=utf-8
 from pyecharts import Pie
 from pyecharts import Bar
-import datetime
 
 
 def show_kv_pie(kv, prefix):

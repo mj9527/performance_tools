@@ -167,6 +167,6 @@ def preproccess_stack(stack_list):
 
 
 if __name__ == "__main__":
-    file_name = setting.INPUT_MEMORY_FILE
-    output_dir = setting.OUTPUT_MEMORY_DIR
+    file_name = setting.WINDOWS_MEMORY_FILE
+    output_dir = setting.WINDOW_MEMORY_OUTPUT_DIR
     get_std_stack_list(file_name)

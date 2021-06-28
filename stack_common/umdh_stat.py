@@ -6,7 +6,6 @@ import setting
 import umdh_pie
 import umdh_file_parser
 import datetime
-#from stack_common import unify_input_file
 import base_utils
 
 
@@ -191,8 +190,8 @@ def match_func(func_name, block_list):
 #                 f.write(line)
 #         f.close()
 if __name__ == "__main__":
-    file_name = setting.INPUT_MEMORY_FILE
-    output_dir = setting.OUTPUT_MEMORY_DIR
+    file_name = setting.WINDOWS_MEMORY_FILE
+    output_dir = setting.WINDOW_MEMORY_OUTPUT_DIR
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
     prefix = output_dir + current_time
 

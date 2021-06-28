@@ -4,7 +4,7 @@ import stack_json
 import stack_txt
 import stack_graph
 import unify_input_file
-import umdh_stat
+import stack_stat
 
 
 def take_four(elem):
@@ -25,7 +25,7 @@ def start_play(std_stack_list, prefix):
     stack_collapse_list = stack_tree.collapse_stack(std_stack_list)
     generate_graph(stack_collapse_list, prefix)
 
-    umdh_stat.statistics_stack_list(std_stack_list, prefix)
+    stack_stat.statistics_stack_list(std_stack_list, prefix)
     return std_stack_list
 
 

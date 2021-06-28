@@ -3,8 +3,7 @@
 import sys
 sys.path.append("..")
 import setting
-import umdh_pie
-import datetime
+import stack_pie
 import base_utils
 
 
@@ -63,7 +62,7 @@ def statistics_module_size(std_stack_list, prefix):
     for std_stack in std_stack_list:
         get_module_alloc_size(std_stack, module_to_size)
     print_module_alloc_size(module_to_size, prefix)
-    umdh_pie.show_kv_pie(module_to_size, prefix)
+    stack_pie.show_kv_pie(module_to_size, prefix)
 
 
 def statistics_stack_list(std_stack_list, prefix):
@@ -112,7 +111,7 @@ def print_start_func_size(module_to_func_list, prefix):
     for module, func_dict in module_to_func_list.items():
         module_prefix = module_dir + module
         func_dict_ret = merge_top_func(module, func_dict)
-        umdh_pie.show_kv_pie(func_dict_ret, module_prefix)
+        stack_pie.show_kv_pie(func_dict_ret, module_prefix)
 
 
 def merge_top_func(module, func_dict):

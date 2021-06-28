@@ -1,5 +1,4 @@
 # coding=utf-8
-import json
 
 
 def get_txt_file(stack_collapse_list, file_name):
@@ -10,7 +9,7 @@ def get_txt_file(stack_collapse_list, file_name):
 
 def get_txt_data(stack_collapse_list):
     threads = []
-    for index, root in enumerate(stack_collapse_list):
+    for _, root in enumerate(stack_collapse_list):
         frame_list = []
         scan_tree_preorder_dfs(root, frame_list)
         threads.append(frame_list)
@@ -27,7 +26,7 @@ def scan_tree_preorder_dfs(node, frame_list):
 
 def get_frame_txt_data(origin_frame):
     frame_info = ""
-    for i in range(origin_frame.index):
+    for _ in range(origin_frame.index):
         frame_info += ' '
     frame_info += str(origin_frame.index) + ' '
     frame_info += origin_frame.module + ' '
@@ -57,12 +56,10 @@ def print_thread_backtrace(thread_group, id_to_item):
         thread_item = id_to_item.get(thread_id)
         thread_name = thread_item.attrib.get('fmt')
         print (thread_name)
-        for (backtrace_id, bt) in thread.items():
+        for (_, bt) in thread.items():
             detail = bt.address_list
             print (detail, bt.weight)
         print ('\n')
-
-
 # def print_thread_backtrace(thread_group, id_to_item):
 #     for (thread_id, thread) in thread_group.items():
 #         thread_item = id_to_item.get(thread_id)
@@ -75,4 +72,3 @@ def print_thread_backtrace(thread_group, id_to_item):
 #             # detail = bt.address_list
 #             print (detail, bt.weight)
 #         print ('\n')
-

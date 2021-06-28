@@ -43,6 +43,6 @@ def umdh_stack_parser(file_name, output_dir):
 
 
 if __name__ == "__main__":
-    file_name = setting.input_memory_file
-    output_dir = setting.output_memory_dir
+    file_name = setting.INPUT_MEMORY_FILE
+    output_dir = setting.OUTPUT_MEMORY_DIR
     umdh_stack_parser(file_name, output_dir)

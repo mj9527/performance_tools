@@ -10,7 +10,7 @@ def export_content(trace_file, prefix):
           + ' --toc' \
           + ' --output ' + content_file
     print (cmd)
-    child = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
     return content_file
 
 
@@ -44,8 +44,7 @@ def export_schema(trace_file, schema_name, prefix):
           + ' --output ' + schema_file
     child = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
     print (cmd)
-    stdout, stderr = child.communicate()
-    # print(stdout)
+    child.communicate()
     return schema_file
 
 
@@ -78,4 +77,3 @@ def get_time_file(file_list):
 #     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
 #     schema_list = parse_content(xml_name)
 #     export_schema_list(schema_list, trace_file, output_dir, current_time)
-

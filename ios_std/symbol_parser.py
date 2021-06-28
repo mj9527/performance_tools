@@ -1,27 +1,27 @@
 # coding=utf-8
+import os
 import subprocess
 import sys
 sys.path.append("..")
 import setting
-import os
 
 
 class ModuleInfo:
     def __init__(self):
-        start_address = 0x0
-        end_address = 0x0
-        name = ""
-        arch = ""
-        path = ""
-        ls = []
-        symbol_file = ""
+        self.start_address = 0x0
+        self.end_address = 0x0
+        self.name = ""
+        self.arch = ""
+        self.path = ""
+        self.ls = []
+        self.symbol_file = ""
 
 
 class SymbolInfo:
     def __init__(self):
-        address = 0x0
-        module_name = ""
-        func_name = ""
+        self.address = 0x0
+        self.module_name = ""
+        self.func_name = ""
 
 
 def string_to_hex(data):
@@ -65,9 +65,9 @@ def find_module_with_address(modules, address):
 def get_symbol_path(module_path):
     module_name = os.path.basename(module_path)
     symbol_file = ''
-    for k in setting.symbol_dict:
+    for k in setting.SYMBOL_DICT:
         if module_path.find(k) != -1:
-            symbol_file = setting.symbol_dict[k]
+            symbol_file = setting.SYMBOL_DICT[k]
             break
     if module_path.find('/private/') != -1:
         if module_path.find('Frameworks') != -1:
@@ -78,7 +78,7 @@ def get_symbol_path(module_path):
         symbol_file += module_path
 
     if module_path.find('/usr/lib') != -1:
-        symbol_file+=module_path
+        symbol_file += module_path
     return symbol_file
 
 
@@ -105,7 +105,7 @@ def symbol_address(module, address):
 def group_address_by_module(modules, address_list):
     for address in address_list:
         module = find_module_with_address(modules, address)
-        if module != None:
+        if module is not None:
             if address not in module.ls:
                 module.ls.append(address)
 

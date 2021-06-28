@@ -45,4 +45,3 @@ def write_json_file(json_data, file_name):
         json_str = json.dumps(json_data)
         f.write(json_str)
         f.close()
-

@@ -7,8 +7,8 @@ import setting
 def mkdir(path):
     path = path.strip()
     path = path.rstrip("\\")
-    isExists = os.path.exists(path)
-    if not isExists:
+    is_exists = os.path.exists(path)
+    if not is_exists:
         os.makedirs(path)
         print (path+' 创建成功')
         return True
@@ -28,12 +28,12 @@ def get_work_dir_and_prefix(output_dir):
 
 def get_work_dir_and_prefix_with_config():
     origin_dir = ''
-    if setting.os_type == 'ios':
-        origin_dir = setting.ios_output_dir
-    elif setting.os_type == 'osx':
-        origin_dir = setting.mac_output_dir
-    elif setting.os_type == 'windows':
-        origin_dir = setting.windows_output_dir
+    if setting.OS_TYPE == 'ios':
+        origin_dir = setting.IOS_OUTPUT_DIR
+    elif setting.OS_TYPE == 'osx':
+        origin_dir = setting.MAC_OUTPUT_DIR
+    elif setting.OS_TYPE == 'windows':
+        origin_dir = setting.WINDOWS_OUTPUT_DIR
     else:
         origin_dir = ''
     output_dir, prefix = get_work_dir_and_prefix(origin_dir)

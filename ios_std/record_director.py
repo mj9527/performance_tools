@@ -1,16 +1,16 @@
 # coding=utf-8
+import sys
+sys.path.append("..")
 import record_apple
 import content_parser
 import time_profile_parser
-import sys
-sys.path.append("..")
 import base_utils
 from stack_common import stack_director
 from stack_common import unify_input_file
 
 
 def start():
-    output_dir, prefix = base_utils.get_work_dir_and_prefix_with_config()
+    _, prefix = base_utils.get_work_dir_and_prefix_with_config()
     trace_file, ret = record_apple.record_apple_config(prefix)
     if ret != 0:
         return

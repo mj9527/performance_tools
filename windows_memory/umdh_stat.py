@@ -25,9 +25,9 @@ def get_first_valid_module(std_stack):
 
 
 def get_valid_stack_module(std_stack):
-    frame = get_stack_module(std_stack, setting.business_module_list)
+    frame = get_stack_module(std_stack, setting.BUSINESS_MODULE_LIST)
     if frame is None:
-        frame = get_stack_module(std_stack, setting.base_module_list)
+        frame = get_stack_module(std_stack, setting.BASE_MODULE_LIST)
     if frame is None:
         frame = get_first_valid_module(std_stack)
     return frame
@@ -123,7 +123,7 @@ def merge_top_func(module, func_dict):
     func_dict_ret = {}
     for index, func in enumerate(func_ls):
         print module, func
-        if index <= setting.top_func_size:
+        if index <= setting.TOP_FUNC_SIZE:
             func_dict_ret[func[0]] = func[1]
         else:
             if 'other' not in func_dict_ret:
@@ -153,9 +153,9 @@ def merge_func(module_to_func_list):
 
 
 def get_valid_start_func(std_stack, module):
-    if module not in setting.module_to_start_func_ls:
+    if module not in setting.MODULE_TO_START_FUNC_LS:
         return None
-    block_list = setting.module_to_start_func_ls[module]
+    block_list = setting.MODULE_TO_START_FUNC_LS[module]
     if block_list is None or len(block_list) == 0:
         return None
     for frame in std_stack.frame_list:
@@ -191,8 +191,8 @@ def match_func(func_name, block_list):
 #                 f.write(line)
 #         f.close()
 if __name__ == "__main__":
-    file_name = setting.input_memory_file
-    output_dir = setting.output_memory_dir
+    file_name = setting.INPUT_MEMORY_FILE
+    output_dir = setting.OUTPUT_MEMORY_DIR
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
     prefix = output_dir + current_time
 

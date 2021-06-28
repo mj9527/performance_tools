@@ -12,7 +12,7 @@ def string_to_hex(data):
 def get_modules(pid):
     cmd = 'frida -U ' + str(pid) + ' -l enumerate_modules.js'
     print (cmd)
-    child = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+    child = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     child.stdin.write('quit')
     stdout, stderr = child.communicate()
     print stderr

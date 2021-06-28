@@ -21,16 +21,8 @@ MAC_OUTPUT_DIR = '/Users/mjzheng/Downloads/mac_data/'
 SYMBOL_DIR = '/Users/mjzheng/Downloads/2.12.3.400/'
 SYMBOL_PARSE = 1
 SYMBOL_DICT = {
-    # 'xnn': symbol_dir,
-    # 'WeMeetApp': symbol_dir,
-    # 'wemeet_app_sdk': symbol_dir,
-    # 'WeMeet': symbol_dir,
-    # 'xcast': symbol_dir,
-    # 'wemeet_base': symbol_dir,
     '/private/': SYMBOL_DIR,
     'System': '/Users/mjzheng/Library/Developer/Xcode/iOS DeviceSupport/14.1 (18A8395)/Symbols',
-    #Developer/usr/lib/libBacktraceRecording.dylib
-    #/usr/lib/system/introspection/libdispatch.dylib
     '/usr/lib': '/Users/mjzheng/Library/Developer/Xcode/iOS DeviceSupport/14.1 (18A8395)/Symbols'
 }
 

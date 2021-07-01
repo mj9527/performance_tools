@@ -55,7 +55,10 @@ def unify_director(file_name, output_dir):
 
 
 def wpt_director():
-    output_dir, csv_file, prefix = record_windows.record_export_with_config()
+    output_dir, prefix = base_utils.get_work_dir_and_prefix_with_config()
+    etl_file = prefix + '.etl'
+    record_windows.record(setting.WPT_DIR, etl_file, setting.run_time)
+    csv_file = record_windows.export_csv(setting.WPT_DIR, etl_file, output_dir)
     # etl_file = "C:/Users/mjzheng/Documents/WPR Files/mjzheng-PC3.03-31-2021.19-28-35.etl"
     # prefix = setting.windows_output_dir + "12"
     # csv_file = record_windows.export_csv(setting.wpt_dir, etl_file, setting.windows_output_dir)

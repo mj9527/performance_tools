@@ -2,7 +2,7 @@
 FILM_TYPE = 'apple_cpu'
 
 # public
-RUN_TIME = 600  # 测试时间单位s
+RUN_TIME = 10  # 测试时间单位s
 OS_TYPE = 'ios'
 
 # apple public
@@ -20,7 +20,6 @@ MAC_BUNDLE_ID = '腾讯会议'
 MAC_OUTPUT_DIR = '/Users/mjzheng/Downloads/mac_data/'
 
 SYMBOL_DIR = '/Users/mjzheng/Library/Developer/Xcode/DerivedData/WeMeetAppModules-fdaudevlzdviqxauhdkwveyajoft/Build/Products/Release-iphoneos/'
-SYMBOL_PARSE = 1
 SYMBOL_DICT = {
     '/private/': SYMBOL_DIR,
     'System': '/Users/mjzheng/Library/Developer/Xcode/iOS DeviceSupport/14.1 (18A8395)/Symbols',

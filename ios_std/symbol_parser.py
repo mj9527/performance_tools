@@ -1,9 +1,6 @@
 # coding=utf-8
 import os
 import subprocess
-import sys
-sys.path.append("..")
-import setting
 
 
 class ModuleInfo:
@@ -62,12 +59,12 @@ def find_module_with_address(modules, address):
     return None
 
 
-def get_symbol_path(module_path):
+def get_symbol_path(module_path, symbol_dict):
     module_name = os.path.basename(module_path)
     symbol_file = ''
-    for k in setting.SYMBOL_DICT:
+    for k in symbol_dict:
         if module_path.find(k) != -1:
-            symbol_file = setting.SYMBOL_DICT[k]
+            symbol_file = symbol_dict[k]
             break
     if module_path.find('/private/') != -1:
         if module_path.find('Frameworks') != -1:
@@ -82,8 +79,8 @@ def get_symbol_path(module_path):
     return symbol_file
 
 
-def symbol_address(module, address):
-    symbol_file = get_symbol_path(module.path)
+def symbol_address(module, address, symbol_dict):
+    symbol_file = get_symbol_path(module.path, symbol_dict)
     module.symbol_file = symbol_file
     if symbol_file == module.path:
         return []
@@ -110,13 +107,13 @@ def group_address_by_module(modules, address_list):
                 module.ls.append(address)
 
 
-def symbol_module_address(modules):
+def symbol_module_address(modules, symbol_dict):
     dict = {}
     for module in modules:
         if len(module.ls) == 0:
             continue
         str_address = address_list_to_str(module.ls)
-        func_name_list = symbol_address(module, str_address)
+        func_name_list = symbol_address(module, str_address, symbol_dict)
         if len(func_name_list) == 0:
             #print ('fail to symbaol address')
             continue
@@ -141,10 +138,10 @@ def address_list_to_str(address_list):
     return str_address
 
 
-def symbol_with_file(file_name, address_list):
+def symbol_with_file(file_name, address_list, symbol_dict):
     modules = get_module_list(file_name)
     group_address_by_module(modules, address_list)
-    address_to_modules = symbol_module_address(modules)
+    address_to_modules = symbol_module_address(modules, symbol_dict)
     return address_to_modules
 
 

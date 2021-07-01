@@ -1,8 +1,5 @@
 # coding=utf-8
 import subprocess
-import sys
-sys.path.append("..")
-import setting
 import record_modules
 
 
@@ -42,20 +39,14 @@ def record(uuid, pid, template, interval, file_name):
     return 0
 
 
-def record_apple_config(prefix):
-    if setting.OS_TYPE == 'ios':
+def record_apple_config(prefix, os_type, uuid, bundle_id, template, interval):
+    if os_type == 'ios':
         print ('record ios')
         sync_cmd = r'frida-ps -Ua'
         inject_cmd = r'frida -U '
-        uuid = setting.IOS_UUID
-        bundle_id = setting.IOS_BUNDLE_ID
     else:
         sync_cmd = r'frida-ps'
         inject_cmd = r'frida '
-        uuid = setting.MAC_UUID
-        bundle_id = setting.MAC_BUNDLE_ID
-    template = setting.INSTRUMENT_TEMPLATE
-    interval = setting.RUN_TIME * 1000
 
     trace_file = prefix + '.trace'
     pid = get_pid(sync_cmd, bundle_id)

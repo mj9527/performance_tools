@@ -20,7 +20,16 @@ def umdh_director(file_name, output_dir):
 
 def instruments_director():
     _, prefix = base_utils.get_work_dir_and_prefix_with_config()
-    trace_file, ret = record_apple.record_apple_config(prefix)
+    if setting.OS_TYPE == 'ios':
+        print ('record ios')
+        uuid = setting.IOS_UUID
+        bundle_id = setting.IOS_BUNDLE_ID
+    else:
+        uuid = setting.MAC_UUID
+        bundle_id = setting.MAC_BUNDLE_ID
+    template = setting.INSTRUMENT_TEMPLATE
+    interval = setting.RUN_TIME * 1000
+    trace_file, ret = record_apple.record_apple_config(prefix, setting.OS_TYPE, uuid, bundle_id, template, interval)
     if ret != 0:
         return
 
@@ -34,7 +43,7 @@ def instruments_director():
     # prefix = '/Users/mjzheng/Downloads/ios_data/2021-07-01_10_48_52/2021-07-01_10_48_52'
     # time_file = prefix + '_time-profile.xml'
 
-    std_stack_list = time_profile_parser.parse_time_profile(time_file, prefix)
+    std_stack_list = time_profile_parser.parse_time_profile(time_file, prefix, setting.SYMBOL_DICT)
     stack_director.start_play(std_stack_list, prefix)
 
 

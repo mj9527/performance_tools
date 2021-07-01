@@ -4,7 +4,6 @@ import xml.etree.ElementTree as ET
 import sys
 sys.path.append("..")
 import symbol_parser
-import setting
 import base_def
 
 
@@ -15,7 +14,7 @@ class Backtrace:
         self.address_list = address_list
 
 
-def parse_time_profile(xml_file, prefix):
+def parse_time_profile(xml_file, prefix, symbol_dict):
     tree = ET.parse(xml_file)
     root = tree.getroot()
     id_to_item = get_all_id_to_item(root)
@@ -24,11 +23,9 @@ def parse_time_profile(xml_file, prefix):
     thread_id_to_backtrace_list = group_stack_list_by_thread(root, id_to_item)
 
     # step 2 : get symbol address
-    address_symbol = {}
-    if setting.SYMBOL_PARSE == 1:
-        module_file = prefix + '.log'
-        address_list = get_address_list(thread_id_to_backtrace_list)
-        address_symbol = symbol_parser.symbol_with_file(module_file, address_list)
+    module_file = prefix + '.log'
+    address_list = get_address_list(thread_id_to_backtrace_list)
+    address_symbol = symbol_parser.symbol_with_file(module_file, address_list, symbol_dict)
 
     # step 3 : {thread_id->stack_list]}
     stack_group_list = unify_thread_backtrace(thread_id_to_backtrace_list, address_symbol)

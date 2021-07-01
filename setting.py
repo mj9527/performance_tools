@@ -1,8 +1,8 @@
 # coding=utf-8
 
 # public
-RUN_TIME = 60  # 测试时间单位s
-OS_TYPE = 'osx'
+RUN_TIME = 600  # 测试时间单位s
+OS_TYPE = 'ios'
 
 # apple public
 INSTRUMENT_TEMPLATE = 'Time Profiler'
@@ -18,7 +18,7 @@ MAC_UUID = '117E51DA-23F9-59D7-88DF-90A4F3F402F4'
 MAC_BUNDLE_ID = '腾讯会议'
 MAC_OUTPUT_DIR = '/Users/mjzheng/Downloads/mac_data/'
 
-SYMBOL_DIR = '/Users/mjzheng/Downloads/2.12.3.400/'
+SYMBOL_DIR = '/Users/mjzheng/Library/Developer/Xcode/DerivedData/WeMeetAppModules-fdaudevlzdviqxauhdkwveyajoft/Build/Products/Release-iphoneos/'
 SYMBOL_PARSE = 1
 SYMBOL_DICT = {
     '/private/': SYMBOL_DIR,
@@ -31,8 +31,8 @@ WINDOWS_OUTPUT_DIR = 'H:/mj_git/perf_data/'
 WPT_DIR = 'C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/'
 
 #memory setting
-WINDOWS_MEMORY_FILE = '//Users/mjzheng/Downloads/memory/213_bak/diff.txt'
-WINDOW_MEMORY_OUTPUT_DIR = '/Users/mjzheng/Downloads/memory/213_bak/'
+WINDOWS_MEMORY_FILE = '/Users/mjzheng/Downloads/memory/213_bak/6_5.txt'
+WINDOW_MEMORY_OUTPUT_DIR = '//Users/mjzheng/Downloads/memory/213_bak/'
 
 
 # MODULE
@@ -56,5 +56,9 @@ MODULE_TO_START_FUNC_LS = {
     'wemeet_sdk': ['_Do_call', 'lambda', 'operator()'],
 }
 TOP_FUNC_SIZE = 10
+
+
+STD_STACK_FILE = '/Users/mjzheng/Downloads/std_stack/sample1/34.txt'
+STD_STACK_OUTPUT_DIR = '/Users/mjzheng/Downloads/std_stack/sample1/'
 
 

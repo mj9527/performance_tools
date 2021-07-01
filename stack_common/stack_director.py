@@ -22,6 +22,9 @@ def start_play(std_stack_list, prefix):
     std_stack_list = sort_stack_list(std_stack_list)
     unify_input_file.write_stack_file(std_stack_list, sort_file)
 
+    std_flame_file = prefix + '_std_stack.txt'
+    unify_input_file.write_std_flame_file(std_stack_list, std_flame_file)
+
     stack_collapse_list = stack_tree.collapse_stack(std_stack_list)
     generate_graph(stack_collapse_list, prefix)
 

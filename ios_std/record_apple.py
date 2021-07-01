@@ -47,10 +47,12 @@ def record_apple_config(prefix):
     if setting.OS_TYPE == 'ios':
         print ('record ios')
         sync_cmd = r'frida-ps -Ua'
+        inject_cmd = r'frida -U '
         uuid = setting.IOS_UUID
         bundle_id = setting.IOS_BUNDLE_ID
     else:
         sync_cmd = r'frida-ps'
+        inject_cmd = r'frida '
         uuid = setting.MAC_UUID
         bundle_id = setting.MAC_BUNDLE_ID
     template = setting.INSTRUMENT_TEMPLATE
@@ -60,7 +62,7 @@ def record_apple_config(prefix):
     pid = get_pid(sync_cmd, bundle_id)
     ret = record(uuid, pid, template, interval, trace_file)
     module_file = prefix + '.log'
-    record_modules.export_module_to_file(pid, module_file)
+    record_modules.export_module_to_file(inject_cmd, pid, module_file)
     return trace_file, ret
 
 

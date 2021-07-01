@@ -1,6 +1,5 @@
 # coding=utf-8
 
-
 def write_perf(std_stack_list, save_path):
     j = 1
     with open(save_path, "w") as f:
@@ -53,3 +52,30 @@ def write_stack_file(std_stack_list, save_path):
                 f.write(frame)
             f.write('\n')
         f.close()
+
+
+def write_std_flame_file(std_stack_list, save_path):
+    with open(save_path, "w") as f:
+        for stack_id, std_stack in enumerate(std_stack_list):
+            stack_line = ''
+            for _, frame in enumerate(std_stack.frame_list):
+                stack_line += ';' + frame.func_name
+            stack_line += ' ' + str(std_stack.weight) + '\n'
+            f.write(stack_line)
+        f.close()
+
+
+def read_std_flame_file(file_name):
+    f = open(file_name)
+    lines = []
+    line = f.readline()
+    while line:
+        lines.append(line)
+        line = f.readline()
+    f.close()
+    return lines
+
+
+if __name__ == "__main__":
+    FILE_NAME = '/Users/mjzheng/Downloads/ios_data/2021-07-01_10_48_52/2021-07-01_10_48_52_std_stack.txt'
+    read_std_flame_file(FILE_NAME)

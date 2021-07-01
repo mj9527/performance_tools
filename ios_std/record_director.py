@@ -9,20 +9,20 @@ from stack_common import stack_director
 
 
 def start():
-    _, prefix = base_utils.get_work_dir_and_prefix_with_config()
-    trace_file, ret = record_apple.record_apple_config(prefix)
-    if ret != 0:
-        return
-
-    print ('start parse content ', trace_file)
-    time_file = content_parser.export_schema(trace_file, 'time-profile', prefix)
+    # _, prefix = base_utils.get_work_dir_and_prefix_with_config()
+    # trace_file, ret = record_apple.record_apple_config(prefix)
+    # if ret != 0:
+    #     return
+    #
+    # print ('start parse content ', trace_file)
+    # time_file = content_parser.export_schema(trace_file, 'time-profile', prefix)
 
     # content_file = content_parser.export_content(trace_file, prefix)
     # schema_list = content_parser.parse_content(content_file)
     # content_parser.export_schema_list(trace_file, prefix, schema_list)
 
-    # prefix = '/Users/mjzheng/Downloads/ios_data/2021-06-18_12_44_23/2021-06-18_12_44_23'
-    # time_file = prefix + '_time-profile.xml'
+    prefix = '/Users/mjzheng/Downloads/ios_data/2021-07-01_10_48_52/2021-07-01_10_48_52'
+    time_file = prefix + '_time-profile.xml'
 
     std_stack_list = time_profile_parser.parse_time_profile(time_file, prefix)
     stack_director.start_play(std_stack_list, prefix)

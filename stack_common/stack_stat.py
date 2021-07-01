@@ -51,10 +51,14 @@ def print_module_alloc_size(module_to_size, prefix):
     module_ls = sorted(module_to_size.items(), key=lambda kv: (kv[1], kv[0]))
     module_ls = module_ls[::-1]
     file_name = prefix + '_module_size_desc.txt'
+    total_size = 0
     with open(file_name, "w") as f:
         for module in module_ls:
+            total_size += int(module[1])
             f.write(str(module[0]) + '\t' + str(module[1]) + '\n')
             #print 'module alloc size: ', module
+        f.write(str(total_size) + '\n')
+        f.close()
 
 
 def statistics_module_size(std_stack_list, prefix):

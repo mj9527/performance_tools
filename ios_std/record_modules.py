@@ -9,8 +9,8 @@ def string_to_hex(data):
     return b
 
 
-def get_modules(pid):
-    cmd = 'frida -U ' + str(pid) + ' -l enumerate_modules.js'
+def get_modules(inject_cmd, pid):
+    cmd = inject_cmd + str(pid) + ' -l enumerate_modules.js'
     print (cmd)
     child = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     child.stdin.write('quit')
@@ -44,8 +44,8 @@ def write_module(save_path, lines):
         f.close()
 
 
-def export_module_to_file(pid, save_path):
-    lines = get_modules(pid)
+def export_module_to_file(inject_cmd, pid, save_path):
+    lines = get_modules(inject_cmd, pid)
     write_module(save_path, lines)
     return
 

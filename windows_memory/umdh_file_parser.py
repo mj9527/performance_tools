@@ -1,8 +1,5 @@
 # coding=utf-8
 from enum import Enum
-import sys
-sys.path.append("..")
-import setting
 import base_def
 
 
@@ -164,9 +161,3 @@ def preproccess_stack(stack_list):
         std_stack = base_def.StackInfo(frame_list, weight)
         std_stack_list.append(std_stack)
     return std_stack_list
-
-
-if __name__ == "__main__":
-    file_name = setting.WINDOWS_MEMORY_FILE
-    output_dir = setting.WINDOW_MEMORY_OUTPUT_DIR
-    get_std_stack_list(file_name)

@@ -1,4 +1,8 @@
 # coding=utf-8
+import sys
+sys.path.append("..")
+import base_def
+
 
 def write_perf(std_stack_list, save_path):
     j = 1
@@ -74,6 +78,36 @@ def read_std_flame_file(file_name):
         line = f.readline()
     f.close()
     return lines
+
+
+def std_flame_to_std_stack(lines):
+    std_stack_list = []
+    for _, line in enumerate(lines):
+        pos = line.rfind(' ')
+        if pos == -1:
+            print 'unexecpt error ', line
+            continue
+        weight = line[pos+1:]
+        weight = float(trim_special(weight))
+        str_frame = line[:pos]
+        func_list = str_frame.split(';')
+        frame_list = []
+        for index, func_name in enumerate(func_list):
+            if func_name == '':
+                continue
+            address = func_name
+            module = ''
+            info = base_def.FrameInfo(index, address, func_name, module, weight)
+            frame_list.append(info)
+        std_stack = base_def.StackInfo(frame_list, weight)
+        std_stack_list.append(std_stack)
+    return std_stack_list
+
+
+def trim_special(line):
+    line = line.strip()
+    line = line.replace('\n', '')
+    return line
 
 
 if __name__ == "__main__":

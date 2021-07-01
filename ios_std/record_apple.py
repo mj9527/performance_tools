@@ -3,7 +3,6 @@ import subprocess
 import sys
 sys.path.append("..")
 import setting
-import base_utils
 import record_modules
 
 
@@ -64,8 +63,3 @@ def record_apple_config(prefix):
     module_file = prefix + '.log'
     record_modules.export_module_to_file(inject_cmd, pid, module_file)
     return trace_file, ret
-
-
-if __name__ == "__main__":
-    _, prefix = base_utils.get_work_dir_and_prefix_with_config()
-    record_apple_config(prefix)

@@ -1,4 +1,5 @@
 # coding=utf-8
+FILM_TYPE = 'apple_cpu'
 
 # public
 RUN_TIME = 600  # 测试时间单位s

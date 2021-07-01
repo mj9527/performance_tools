@@ -36,15 +36,10 @@ WINDOW_MEMORY_OUTPUT_DIR = '//Users/mjzheng/Downloads/memory/213_bak/'
 
 
 # MODULE
-BUSINESS_MODULE_LIST = ['wemeet_framework', 'wemeet_module_api', 'imsdk', 'xnn',
-                        'wemeetapp', 'wemeet_sdk', 'wemeet_app_sdk', 'wemeet',
-                        'libYTFaceTracker', 'xcast', 'wemeet_framework_common']
-BASE_MODULE_LIST = ['GF']
-
 PRIORITY_MODULE_LIST = [
-    ['libYTFaceTracker', 'xcast', 'imsdk', 'imsdk'],
-    ['wemeet_framework', 'wemeet_module_api', 'wemeetapp',
-     'wemeet_sdk', 'wemeet_app_sdk', 'wemeet', 'wemeet_framework_common'],
+    ['wemeet_framework', 'wemeet_module_api', 'imsdk', 'xnn',
+     'wemeetapp', 'wemeet_sdk', 'wemeet_app_sdk', 'wemeet',
+     'libYTFaceTracker', 'xcast', 'wemeet_framework_common'],
     ['GF']
 ]
 

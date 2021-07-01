@@ -17,7 +17,7 @@ def sort_stack_list(std_stack_list):
     return std_stack_list
 
 
-def start_play(std_stack_list, prefix):
+def start_play(std_stack_list, prefix, priority_module_list):
     sort_file = prefix + '_sort.txt'
     std_stack_list = sort_stack_list(std_stack_list)
     unify_input_file.write_stack_file(std_stack_list, sort_file)
@@ -28,7 +28,7 @@ def start_play(std_stack_list, prefix):
     stack_collapse_list = stack_tree.collapse_stack(std_stack_list)
     generate_graph(stack_collapse_list, prefix)
 
-    stack_stat.statistics_stack_list(std_stack_list, prefix)
+    stack_stat.statistics_stack_list(std_stack_list, prefix, priority_module_list)
     return std_stack_list
 
 

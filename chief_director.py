@@ -15,7 +15,7 @@ def umdh_director(file_name, output_dir):
     std_stack_list = umdh_file_parser.get_std_stack_list(file_name)
     print 'all stack len ', len(std_stack_list)
     _, prefix = base_utils.get_work_dir_and_prefix(output_dir)
-    stack_director.start_play(std_stack_list, prefix)
+    stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
 
 
 def instruments_director():
@@ -44,14 +44,14 @@ def instruments_director():
     # time_file = prefix + '_time-profile.xml'
 
     std_stack_list = time_profile_parser.parse_time_profile(time_file, prefix, setting.SYMBOL_DICT)
-    stack_director.start_play(std_stack_list, prefix)
+    stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
 
 
 def unify_director(file_name, output_dir):
     lines = unify_input_file.read_std_flame_file(file_name)
     std_stack_list = unify_input_file.std_flame_to_std_stack(lines)
     _, prefix = base_utils.get_work_dir_and_prefix(output_dir)
-    stack_director.start_play(std_stack_list, prefix)
+    stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
 
 
 def wpt_director():

@@ -21,17 +21,18 @@ def get_first_valid_module(std_stack):
     return None
 
 
-def get_valid_stack_module(std_stack):
-    frame = get_stack_module(std_stack, setting.BUSINESS_MODULE_LIST)
-    if frame is None:
-        frame = get_stack_module(std_stack, setting.BASE_MODULE_LIST)
+def get_valid_stack_module(std_stack, priority_module_list):
+    for module_list in priority_module_list:
+        frame = get_stack_module(std_stack, module_list)
+        if frame is not None:
+            break
     if frame is None:
         frame = get_first_valid_module(std_stack)
     return frame
 
 
-def get_module_alloc_size(std_stack, module_to_size):
-    frame = get_valid_stack_module(std_stack)
+def get_module_alloc_size(std_stack, module_to_size, priority_module_list):
+    frame = get_valid_stack_module(std_stack, priority_module_list)
     if frame is None:
         print 'unexpect error : failed to get module frame'
         return
@@ -61,29 +62,29 @@ def print_module_alloc_size(module_to_size, prefix):
         f.close()
 
 
-def statistics_module_size(std_stack_list, prefix):
+def statistics_module_size(std_stack_list, prefix, priority_module_list):
     module_to_size = {}
     for std_stack in std_stack_list:
-        get_module_alloc_size(std_stack, module_to_size)
+        get_module_alloc_size(std_stack, module_to_size, priority_module_list)
     print_module_alloc_size(module_to_size, prefix)
     stack_pie.show_kv_pie(module_to_size, prefix)
 
 
-def statistics_stack_list(std_stack_list, prefix):
-    statistics_module_size(std_stack_list, prefix)
-    statistics_start_func_size(std_stack_list, prefix)
+def statistics_stack_list(std_stack_list, prefix, priority_module_list):
+    statistics_module_size(std_stack_list, prefix, priority_module_list)
+    statistics_start_func_size(std_stack_list, prefix, priority_module_list)
 
 
-def statistics_start_func_size(std_stack_list, prefix):
+def statistics_start_func_size(std_stack_list, prefix, priority_module_list):
     module_to_func_dict = {}
     for std_stack in std_stack_list:
-        get_start_func_size(std_stack, module_to_func_dict)
+        get_start_func_size(std_stack, module_to_func_dict, priority_module_list)
     tmp_dict = merge_func(module_to_func_dict)
     print_start_func_size(tmp_dict, prefix)
 
 
-def get_start_func_size(std_stack, module_to_func_dict):
-    origin_frame = get_valid_stack_module(std_stack)
+def get_start_func_size(std_stack, module_to_func_dict, priority_module_list):
+    origin_frame = get_valid_stack_module(std_stack, priority_module_list)
     if origin_frame is None:
         print 'unexpect error : failed to get module frame'
         return

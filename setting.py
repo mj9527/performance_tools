@@ -9,9 +9,9 @@ APP_ID = '腾讯会议'
 SYSTEM_OUTPUT_DIR = '/Users/mjzheng/Downloads/performance_data'
 #SYSTEM_OUTPUT_DIR = 'H:/mj_git/perf_data/'
 
-SYSTEM_TYPE = 'ios'  #ios, mac, windows, linux
+SYSTEM_TYPE = 'mac'  #ios, mac, windows, linux
 
-PROFILER_TYPE = 'std_stack'  # 'instrument', 'umdh', 'wpt', 'std_stack'
+PROFILER_TYPE = 'instrument'  # 'instrument', 'umdh', 'wpt', 'std_stack'
 PROFILER_SUB_TYPE = 'Time Profiler'
 
 

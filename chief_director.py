@@ -9,6 +9,7 @@ from ios_std import content_parser
 from ios_std import time_profile_parser
 from windows import record_windows
 from windows import etl_parser
+from windows import csv_file_parser
 
 
 def umdh_director(file_name, output_dir, prefix):
@@ -18,13 +19,8 @@ def umdh_director(file_name, output_dir, prefix):
 
 
 def instruments_director(output_dir, prefix):
-    if setting.SYSTEM_TYPE == 'ios':
-        print ('record ios')
-        uuid = setting.DEVICE_UUID
-        bundle_id = setting.APP_ID
-    else:
-        uuid = setting.DEVICE_UUID
-        bundle_id = setting.MAC_BUNDLE_ID
+    uuid = setting.DEVICE_UUID
+    bundle_id = setting.APP_ID
     template = setting.PROFILER_SUB_TYPE
     interval = setting.RUN_TIME * 1000
     trace_file, ret = record_apple.record_apple_config(prefix, setting.SYSTEM_TYPE, uuid, bundle_id, template, interval)
@@ -59,14 +55,8 @@ def wpt_director(output_dir, prefix):
     # prefix = setting.windows_output_dir + "12"
     # csv_file = record_windows.export_csv(setting.wpt_dir, etl_file, setting.windows_output_dir)
 
-    json_file = prefix + '.json'
-    etl_parser.csv_to_json(csv_file, json_file)
-
-    flame_file = prefix + "_flame.html"
-    sunburst_file = prefix + "_sunburst.html"
-    stack_graph.get_sunburstgraph_from_json(json_file, sunburst_file)
-    stack_graph.get_flamegrap_from_json(json_file, flame_file)
-    return json_file
+    std_stack_list = csv_file_parser.parse_csv_file(csv_file, 'wemeetapp.exe')
+    stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
 
 
 def chief_director():

@@ -1,23 +1,26 @@
 # coding=utf-8
-FILM_TYPE = 'apple_cpu'
+
+DEVICE_UUID = '6daac09469e94a24a2fa1f684bcd57963fd29c25'  # mj-6s uuid
+#DEVICE_UUID = 'dfd530239e7e340e3874371707fbc71b0a04efb9'  # ipad4
+#DEVICE_UUID = '117E51DA-23F9-59D7-88DF-90A4F3F402F4'  #mac uuid
+
+APP_ID = '腾讯会议'
+
+SYSTEM_OUTPUT_DIR = '/Users/mjzheng/Downloads/performance_data'
+#SYSTEM_OUTPUT_DIR = 'H:/mj_git/perf_data/'
+
+SYSTEM_TYPE = 'ios'  #ios, mac, windows, linux
+
+PROFILER_TYPE = 'std_stack'  # 'instrument', 'umdh', 'wpt', 'std_stack'
+PROFILER_SUB_TYPE = 'Time Profiler'
+
+
+#memory setting
+#PROFILER_INPUT_FILE = '/Users/mjzheng/Downloads/memory/213_bak/6_5.txt'
+PROFILER_INPUT_FILE = '/Users/mjzheng/Downloads/std_stack/sample1/36.txt'  # std_stack
 
 # public
-RUN_TIME = 10  # 测试时间单位s
-OS_TYPE = 'ios'
-
-# apple public
-INSTRUMENT_TEMPLATE = 'Time Profiler'
-
-# ios_std setting
-IOS_UUID = '6daac09469e94a24a2fa1f684bcd57963fd29c25'  # mj-6s uuid
-#IOS_UUID = 'dfd530239e7e340e3874371707fbc71b0a04efb9'  # ipad4
-
-IOS_BUNDLE_ID = '腾讯会议'
-IOS_OUTPUT_DIR = '/Users/mjzheng/Downloads/ios_data/'
-
-MAC_UUID = '117E51DA-23F9-59D7-88DF-90A4F3F402F4'
-MAC_BUNDLE_ID = '腾讯会议'
-MAC_OUTPUT_DIR = '/Users/mjzheng/Downloads/mac_data/'
+RUN_TIME = 60  # 测试时间单位s
 
 SYMBOL_DIR = '/Users/mjzheng/Library/Developer/Xcode/DerivedData/WeMeetAppModules-fdaudevlzdviqxauhdkwveyajoft/Build/Products/Release-iphoneos/'
 SYMBOL_DICT = {
@@ -27,12 +30,7 @@ SYMBOL_DICT = {
 }
 
 # windows setting
-WINDOWS_OUTPUT_DIR = 'H:/mj_git/perf_data/'
 WPT_DIR = 'C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/'
-
-#memory setting
-WINDOWS_MEMORY_FILE = '/Users/mjzheng/Downloads/memory/213_bak/6_5.txt'
-WINDOW_MEMORY_OUTPUT_DIR = '//Users/mjzheng/Downloads/memory/213_bak/'
 
 
 # MODULE
@@ -51,9 +49,3 @@ MODULE_TO_START_FUNC_LS = {
     'wemeet_sdk': ['_Do_call', 'lambda', 'operator()'],
 }
 TOP_FUNC_SIZE = 10
-
-
-STD_STACK_FILE = '/Users/mjzheng/Downloads/std_stack/sample1/34.txt'
-STD_STACK_OUTPUT_DIR = '/Users/mjzheng/Downloads/std_stack/sample1/'
-
-

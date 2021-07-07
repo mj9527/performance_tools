@@ -1,7 +1,6 @@
 # coding=utf-8
 import datetime
 import os
-import setting
 
 
 def mkdir(path):
@@ -18,24 +17,15 @@ def mkdir(path):
         return False
 
 
-def get_work_dir_and_prefix(output_dir):
+def get_work_dir_and_prefix(root_dir, system_type, profiler_type):
+    if profiler_type == 'std_stack':
+        origin_dir = root_dir + '/' + profiler_type + '/'
+    else:
+        origin_dir = root_dir + '/' + system_type + '/' + profiler_type + '/'
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
-    output_dir = output_dir + current_time + '/'
+    output_dir = origin_dir + current_time + '/'
     mkdir(output_dir)
     prefix = output_dir + current_time
-    return output_dir, prefix
-
-
-def get_work_dir_and_prefix_with_config():
-    if setting.OS_TYPE == 'ios':
-        origin_dir = setting.IOS_OUTPUT_DIR
-    elif setting.OS_TYPE == 'osx':
-        origin_dir = setting.MAC_OUTPUT_DIR
-    elif setting.OS_TYPE == 'windows':
-        origin_dir = setting.WINDOWS_OUTPUT_DIR
-    else:
-        origin_dir = ''
-    output_dir, prefix = get_work_dir_and_prefix(origin_dir)
     return output_dir, prefix
 
 

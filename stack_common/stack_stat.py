@@ -111,7 +111,7 @@ def get_start_func_size(std_stack, module_to_func_dict, priority_module_list):
 
 
 def print_start_func_size(module_to_func_list, prefix):
-    module_dir = prefix + '/module/'
+    module_dir = prefix + '_module/'
     base_utils.mkdir(module_dir)
     for module, func_dict in module_to_func_list.items():
         module_prefix = module_dir + module

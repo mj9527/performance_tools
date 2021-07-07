@@ -51,6 +51,6 @@ def record_apple_config(prefix, os_type, uuid, bundle_id, template, interval):
     trace_file = prefix + '.trace'
     pid = get_pid(sync_cmd, bundle_id)
     ret = record(uuid, pid, template, interval, trace_file)
-    module_file = prefix + '.log'
-    record_modules.export_module_to_file(inject_cmd, pid, module_file)
+    # module_file = prefix + '.log'
+    # record_modules.export_module_to_file(inject_cmd, pid, module_file)
     return trace_file, ret

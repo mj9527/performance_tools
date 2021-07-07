@@ -20,17 +20,22 @@ def get_proc_data(file_name, proc_name):
 def translate_std_stack(lines):
     std_stack_list = []
     for line in lines:
-        weight = line[4]
+        weight = float(line[4])
         stack_trace = line[2]
         stack_frame_list = stack_trace.split('/')
         frame_list = []
         for index, frame in enumerate(stack_frame_list):
             parts = frame.split('!')
+            if len(parts) != 2:
+                continue
             module = parts[0].strip()
             func_name = parts[1].strip()
             address = func_name
             info = base_def.FrameInfo(index, address, func_name, module, weight)
             frame_list.append(info)
+        if len(frame_list) == 0:
+            print 'empty frame'
+            continue
         std_stack = base_def.StackInfo(frame_list, weight)
         std_stack_list.append(std_stack)
     return std_stack_list

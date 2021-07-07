@@ -177,12 +177,12 @@ def unify_thread_backtrace(thread_id_to_backtrace_list, address_symbol):
     std_stack_list = []
     for (thread_id, stacK_dict) in thread_id_to_backtrace_list.items():
         for (backtrace_id, bt) in stacK_dict.items():
-            std_stack = get_std_stack(bt, address_symbol)
+            std_stack = get_std_stack(bt, address_symbol, thread_id)
             std_stack_list.append(std_stack)
     return std_stack_list
 
 
-def get_std_stack(bt, address_symbol):
+def get_std_stack(bt, address_symbol, thread_id):
     frame_list = []
     for index, address in enumerate(bt.address_list):
         weight = bt.weight
@@ -203,7 +203,7 @@ def get_std_stack(bt, address_symbol):
             module = 'unknow'
         info = base_def.FrameInfo(index, address, func_name, module, weight)
         frame_list.append(info)
-    std_stack = base_def.StackInfo(frame_list, bt.weight)
+    std_stack = base_def.StackInfo(frame_list, bt.weight, thread_id)
     return std_stack
 
 

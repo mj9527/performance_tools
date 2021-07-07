@@ -18,12 +18,12 @@ def umdh_director(file_name, output_dir, prefix):
     stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
 
 
-def instruments_director(output_dir, prefix):
+def instruments_director(output_dir, prefix, system_type):
     uuid = setting.DEVICE_UUID
     bundle_id = setting.APP_ID
     template = setting.PROFILER_SUB_TYPE
     interval = setting.RUN_TIME * 1000
-    trace_file, ret = record_apple.record_apple_config(prefix, setting.SYSTEM_TYPE, uuid, bundle_id, template, interval)
+    trace_file, ret = record_apple.record_apple_config(prefix, system_type, uuid, bundle_id, template, interval)
     if ret != 0:
         return
 
@@ -48,13 +48,14 @@ def unify_director(file_name, output_dir, prefix):
 
 
 def wpt_director(output_dir, prefix):
-    etl_file = prefix + '.etl'
-    record_windows.record(setting.WPT_DIR, etl_file, setting.run_time)
-    csv_file = record_windows.export_csv(setting.WPT_DIR, etl_file, output_dir)
+    # etl_file = prefix + '.etl'
+    # record_windows.record(setting.WPT_DIR, etl_file, setting.run_time)
+    # csv_file = record_windows.export_csv(setting.WPT_DIR, etl_file, output_dir)
     # etl_file = "C:/Users/mjzheng/Documents/WPR Files/mjzheng-PC3.03-31-2021.19-28-35.etl"
     # prefix = setting.windows_output_dir + "12"
     # csv_file = record_windows.export_csv(setting.wpt_dir, etl_file, setting.windows_output_dir)
 
+    csv_file = '/Users/mjzheng/Documents/mj_git/performance_tools/sample/CPU_Usage_(Sampled)_Utilization_by_Process,_Thread,_Stack.csv'
     std_stack_list = csv_file_parser.parse_csv_file(csv_file, 'wemeetapp.exe')
     stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
 
@@ -64,11 +65,11 @@ def chief_director():
     output_dir = setting.SYSTEM_OUTPUT_DIR
     profiler_type = setting.PROFILER_TYPE
     system_type = setting.SYSTEM_TYPE
-    output_dir, prefix = base_utils.get_work_dir_and_prefix(output_dir, system_type, profiler_type)
+    output_dir, prefix = base_utils.get_work_dir_and_prefix(output_dir, profiler_type)
     if profiler_type == 'umdh':
         umdh_director(input_file, output_dir, prefix)
     elif profiler_type == 'instrument':
-        instruments_director(output_dir, prefix)
+        instruments_director(output_dir, prefix, system_type)
     elif profiler_type == 'std_stack':
         unify_director(input_file, output_dir, prefix)
     elif profiler_type == 'wpt':

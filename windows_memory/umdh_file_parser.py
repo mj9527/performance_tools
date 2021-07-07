@@ -158,6 +158,6 @@ def preproccess_stack(stack_list):
             address = func_name
             info = base_def.FrameInfo(index, address, func_name, module, weight)
             frame_list.append(info)
-        std_stack = base_def.StackInfo(frame_list, weight)
+        std_stack = base_def.StackInfo(frame_list, weight, -1)
         std_stack_list.append(std_stack)
     return std_stack_list

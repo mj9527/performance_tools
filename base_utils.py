@@ -17,11 +17,8 @@ def mkdir(path):
         return False
 
 
-def get_work_dir_and_prefix(root_dir, system_type, profiler_type):
-    if profiler_type == 'std_stack':
-        origin_dir = root_dir + '/' + profiler_type + '/'
-    else:
-        origin_dir = root_dir + '/' + system_type + '/' + profiler_type + '/'
+def get_work_dir_and_prefix(root_dir, profiler_type):
+    origin_dir = root_dir + '/' + profiler_type + '/'
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
     output_dir = origin_dir + current_time + '/'
     mkdir(output_dir)

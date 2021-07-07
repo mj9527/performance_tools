@@ -1,15 +1,8 @@
-
-
-class TreeNode:
-    def __init__(self, data):
-        self.data = data
-        self.child_list = []
-
-
 class StackInfo:
-    def __init__(self, frame_list, weight):
+    def __init__(self, frame_list, weight, thread_id):
         self.frame_list = frame_list
         self.weight = weight
+        self.thread_id = thread_id
 
 
 class FrameInfo:

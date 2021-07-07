@@ -9,15 +9,15 @@ APP_ID = '腾讯会议'
 SYSTEM_OUTPUT_DIR = '/Users/mjzheng/Downloads/performance_data'
 #SYSTEM_OUTPUT_DIR = 'H:/mj_git/perf_data/'
 
-SYSTEM_TYPE = 'mac'  #ios, mac, windows, linux
+SYSTEM_TYPE = 'windows'  #ios, mac, windows, linux
 
-PROFILER_TYPE = 'instrument'  # 'instrument', 'umdh', 'wpt', 'std_stack'
+PROFILER_TYPE = 'umdh'  # 'instrument', 'umdh', 'wpt', 'std_stack'
 PROFILER_SUB_TYPE = 'Time Profiler'
 
 
 #memory setting
-#PROFILER_INPUT_FILE = '/Users/mjzheng/Downloads/memory/213_bak/6_5.txt'
-PROFILER_INPUT_FILE = '/Users/mjzheng/Downloads/std_stack/sample1/36.txt'  # std_stack
+#PROFILER_INPUT_FILE = '/Users/mjzheng/Documents/mj_git/performance_tools/sample/CPU_Usage_(Sampled)_Utilization_by_Process,_Thread,_Stack.csv'  # std_stack
+PROFILER_INPUT_FILE = '/Users/mjzheng/Documents/mj_git/performance_tools/sample/udmh_wemeet_sample.txt'
 
 # public
 RUN_TIME = 60  # 测试时间单位s

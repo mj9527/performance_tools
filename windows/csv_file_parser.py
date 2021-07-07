@@ -22,6 +22,7 @@ def translate_std_stack(lines):
     for line in lines:
         weight = float(line[4])
         stack_trace = line[2]
+        thread_id = int(line[1])
         stack_frame_list = stack_trace.split('/')
         frame_list = []
         for index, frame in enumerate(stack_frame_list):
@@ -36,7 +37,7 @@ def translate_std_stack(lines):
         if len(frame_list) == 0:
             print 'empty frame'
             continue
-        std_stack = base_def.StackInfo(frame_list, weight)
+        std_stack = base_def.StackInfo(frame_list, weight, thread_id)
         std_stack_list.append(std_stack)
     return std_stack_list
 

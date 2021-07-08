@@ -30,7 +30,7 @@ def add_double_quote(origin_str):
 def export_csv(wpt_dir, etl_file, output_dir):
     wpa_exporter = wpt_dir+"wpaexporter.exe"
     print(wpa_exporter)
-    profile_file = os.getcwd() + '\\cpuusage.wpaProfile'
+    profile_file = os.getcwd() + '\\windows\\cpuusage.wpaProfile'
     cmd = add_double_quote(wpa_exporter) \
           + " -i " + etl_file \
           + " -profile " + profile_file \

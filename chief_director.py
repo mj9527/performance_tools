@@ -48,7 +48,7 @@ def unify_director(file_name, output_dir, prefix):
 def wpt_director(output_dir, prefix):
     etl_file = prefix + '.etl'
     wpt_dir = setting.WPT_DIR
-    interval = setting.run_time
+    interval = setting.RUN_TIME
     app_id = setting.APP_ID
     record_windows.record(wpt_dir, etl_file, interval)
     csv_file = record_windows.export_csv(wpt_dir, etl_file, output_dir)

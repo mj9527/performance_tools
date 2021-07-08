@@ -48,9 +48,28 @@ def record_apple_config(prefix, os_type, uuid, bundle_id, template, interval):
         sync_cmd = r'frida-ps'
         inject_cmd = r'frida '
 
+    enum_device()
     trace_file = prefix + '.trace'
     pid = get_pid(sync_cmd, bundle_id)
     ret = record(uuid, pid, template, interval, trace_file)
     # module_file = prefix + '.log'
     # record_modules.export_module_to_file(inject_cmd, pid, module_file)
     return trace_file, ret
+
+
+def enum_device():
+    cmd = "xcrun xctrace list devices"
+    print (cmd)
+    child = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    _, stdout = child.communicate()
+    lines = stdout.splitlines()
+    for line in lines:
+        if line.find('Devices') != -1:
+            continue
+        elif line.find('Simulators') != -1:
+            break
+        elif line == '':
+            continue
+        else:
+            print ('find ', line)
+    return 0

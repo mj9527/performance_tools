@@ -2,13 +2,11 @@ import setting
 import base_utils
 from stack_common import unify_input_file
 from stack_common import stack_director
-from stack_common import stack_graph
 from windows_memory import umdh_file_parser
 from ios_std import record_apple
 from ios_std import content_parser
 from ios_std import time_profile_parser
 from windows import record_windows
-from windows import etl_parser
 from windows import csv_file_parser
 
 
@@ -48,15 +46,15 @@ def unify_director(file_name, output_dir, prefix):
 
 
 def wpt_director(output_dir, prefix):
-    # etl_file = prefix + '.etl'
-    # record_windows.record(setting.WPT_DIR, etl_file, setting.run_time)
-    # csv_file = record_windows.export_csv(setting.WPT_DIR, etl_file, output_dir)
-    # etl_file = "C:/Users/mjzheng/Documents/WPR Files/mjzheng-PC3.03-31-2021.19-28-35.etl"
-    # prefix = setting.windows_output_dir + "12"
-    # csv_file = record_windows.export_csv(setting.wpt_dir, etl_file, setting.windows_output_dir)
+    etl_file = prefix + '.etl'
+    wpt_dir = setting.WPT_DIR
+    interval = setting.run_time
+    app_id = setting.APP_ID
+    record_windows.record(wpt_dir, etl_file, interval)
+    csv_file = record_windows.export_csv(wpt_dir, etl_file, output_dir)
 
-    csv_file = '/Users/mjzheng/Documents/mj_git/performance_tools/sample/CPU_Usage_(Sampled)_Utilization_by_Process,_Thread,_Stack.csv'
-    std_stack_list = csv_file_parser.parse_csv_file(csv_file, 'wemeetapp.exe')
+    #csv_file = '/Users/mjzheng/Documents/mj_git/performance_tools/sample/CPU_Usage_(Sampled)_Utilization_by_Process,_Thread,_Stack.csv'
+    std_stack_list = csv_file_parser.parse_csv_file(csv_file, app_id)
     stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
 
 

@@ -8,9 +8,12 @@ from ios_std import content_parser
 from ios_std import time_profile_parser
 from windows import record_windows
 from windows import csv_file_parser
+from windows_memory import record_umdh
 
 
 def umdh_director(file_name, output_dir, prefix):
+    interval = setting.RUN_TIME
+    file_name = record_umdh.record_interval(prefix, interval)
     std_stack_list = umdh_file_parser.get_std_stack_list(file_name)
     print 'all stack len ', len(std_stack_list)
     stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)

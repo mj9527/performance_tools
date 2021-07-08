@@ -3,14 +3,19 @@
 import psutil
 
 
-def enum_process():
-    pidList = psutil.pids()
-    for pid in pidList:
-        pidDictionary = psutil.Process(pid).as_dict(attrs=['pid', 'name', 'username', 'exe', 'create_time'])
-        for keys in pidDictionary.keys():
-            tempText = keys + ':' + str(pidDictionary[keys]) + '\n'
-            print tempText
+def get_main_process():
+    pid_list = psutil.pids()
+    for pid in pid_list:
+        pid_attr_dict = psutil.Process(pid).as_dict(attrs=['pid', 'name', 'cmdline'])
+        if pid_attr_dict['name'] != 'wemeetapp.exe':
+            continue
+        cmdline = pid_attr_dict['cmdline']
+        for param in cmdline:
+            if param.find('--module') != -1 and param.find('wemeet.dll') != -1:
+                return int(pid_attr_dict['pid'])
+    return -1
 
 
 if __name__ == "__main__":
-    enum_process()
+    pid = get_main_process()
+    print pid

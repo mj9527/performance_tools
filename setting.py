@@ -1,17 +1,14 @@
 # coding=utf-8
 
-DEVICE_UUID = '6daac09469e94a24a2fa1f684bcd57963fd29c25'  # mj-6s uuid
-#DEVICE_UUID = 'dfd530239e7e340e3874371707fbc71b0a04efb9'  # ipad4
-#DEVICE_UUID = '117E51DA-23F9-59D7-88DF-90A4F3F402F4'  #mac uuid
-
+DEVICE_UUID = ''  # get according system_type, valid in apple os
 APP_ID = '腾讯会议'
 
 SYSTEM_OUTPUT_DIR = '/Users/mjzheng/Downloads/performance_data'
 #SYSTEM_OUTPUT_DIR = 'H:/mj_git/perf_data/'
 
-SYSTEM_TYPE = 'windows'  #ios, mac, windows, linux
+SYSTEM_TYPE = 'ios'  #ios, mac, windows, linux
 
-PROFILER_TYPE = 'umdh'  # 'instrument', 'umdh', 'wpt', 'std_stack'
+PROFILER_TYPE = 'instrument'  # 'instrument', 'umdh', 'wpt', 'std_stack'
 PROFILER_SUB_TYPE = 'Time Profiler'
 
 

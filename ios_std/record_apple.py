@@ -47,8 +47,11 @@ def record_apple_config(prefix, os_type, uuid, bundle_id, template, interval):
     else:
         sync_cmd = r'frida-ps'
         inject_cmd = r'frida '
-
-    enum_device()
+    if uuid == '':
+        device_dict = enum_device()
+        if os_type in device_dict:
+            uuid = device_dict[os_type]
+            print 'auto get uuid', uuid
     trace_file = prefix + '.trace'
     pid = get_pid(sync_cmd, bundle_id)
     ret = record(uuid, pid, template, interval, trace_file)
@@ -63,6 +66,7 @@ def enum_device():
     child = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     _, stdout = child.communicate()
     lines = stdout.splitlines()
+    device_dict = {}
     for line in lines:
         if line.find('Devices') != -1:
             continue
@@ -71,5 +75,16 @@ def enum_device():
         elif line == '':
             continue
         else:
-            print ('find ', line)
-    return 0
+            pos = line.rfind('(')
+            sz = len(line)
+            if pos != -1:
+                device_name = line[:pos-1].strip()
+                uuid = line[pos+1:sz-1].strip()
+                os_type = ''
+                if device_name.find('(') != -1:
+                    os_type = 'ios'
+                else:
+                    os_type = 'mac'
+                device_dict[os_type] = uuid
+                print os_type, device_name, uuid
+    return device_dict

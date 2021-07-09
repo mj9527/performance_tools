@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from Android import callgraph_2_json
+from simpleperf import callgraph_2_json
 
 CPU_SRCH_MAP = {"arm": "armeabi-v7a", "arm64": "arm64-v8a", "x86": "x86", "x86_64": "x86_64"}
 

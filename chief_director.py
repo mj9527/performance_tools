@@ -9,6 +9,8 @@ from ios_std import time_profile_parser
 from windows import record_windows
 from windows import csv_file_parser
 from windows_memory import record_umdh
+from simpleperf import analyze_cpu_usage
+import time
 
 
 def umdh_director(file_name, output_dir, prefix):
@@ -61,6 +63,16 @@ def wpt_director(output_dir, prefix):
     stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
 
 
+def simple_perf_director(device_id, ndk_path, app_name, symbol_path, cap_time_sec):
+    if not analyze_cpu_usage.copy_symbols_and_simpleperf_to_device(device_id, ndk_path, app_name, symbol_path):
+        raise Exception("dump json file error!")
+
+    time.sleep(10)
+
+    json_file = "temp.json"
+    analyze_cpu_usage.record_perfdata(app_name, json_file, device_id, cap_time_sec)
+
+
 def chief_director():
     input_file = setting.PROFILER_INPUT_FILE
     output_dir = setting.SYSTEM_OUTPUT_DIR
@@ -75,6 +87,8 @@ def chief_director():
         unify_director(input_file, output_dir, prefix)
     elif profiler_type == 'wpt':
         wpt_director(output_dir, prefix)
+    elif profiler_type == 'simple_perf':
+        simple_perf_director('', '', '', '', 10)
 
 
 if __name__ == "__main__":

@@ -35,7 +35,7 @@ def copy_symbols_and_simpleperf_to_device(device_id, ndk_path, package_name, sym
     return True
 
 
-def reocord_perfdata(package_name, outfile, device_id, cap_time_sec):
+def record_perfdata(package_name, outfile, device_id, cap_time_sec):
     pid = get_pid(package_name, device_id)
 
     with open("cmd.txt", "w") as cmd_file:

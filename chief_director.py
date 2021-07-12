@@ -3,13 +3,13 @@ import time
 import base_utils
 from stack_common import unify_input_file
 from stack_common import stack_director
-from windows_memory import umdh_file_parser
-from ios_std import record_apple
-from ios_std import content_parser
-from ios_std import time_profile_parser
+from umdh import umdh_file_parser
+from umdh import record_umdh
+from instruments import record_apple
+from instruments import content_parser
+from instruments import time_profile_parser
 from windows import record_windows
 from windows import csv_file_parser
-from windows_memory import record_umdh
 from simpleperf import analyze_cpu_usage
 
 

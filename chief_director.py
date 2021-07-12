@@ -1,4 +1,5 @@
 import setting
+import time
 import base_utils
 from stack_common import unify_input_file
 from stack_common import stack_director
@@ -10,18 +11,18 @@ from windows import record_windows
 from windows import csv_file_parser
 from windows_memory import record_umdh
 from simpleperf import analyze_cpu_usage
-import time
 
 
-def umdh_director(file_name, output_dir, prefix):
-    interval = setting.RUN_TIME
-    file_name = record_umdh.record_interval(prefix, interval)
+def umdh_director(file_name, prefix):
+    if file_name == '':
+        interval = setting.RUN_TIME
+        file_name = record_umdh.record_interval(prefix, interval)
     std_stack_list = umdh_file_parser.get_std_stack_list(file_name)
     print 'all stack len ', len(std_stack_list)
     stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
 
 
-def instruments_director(output_dir, prefix, system_type):
+def instruments_director(prefix, system_type):
     uuid = setting.DEVICE_UUID
     bundle_id = setting.APP_ID
     template = setting.PROFILER_SUB_TYPE
@@ -44,7 +45,7 @@ def instruments_director(output_dir, prefix, system_type):
     stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
 
 
-def unify_director(file_name, output_dir, prefix):
+def unify_director(file_name, prefix):
     lines = unify_input_file.read_std_flame_file(file_name)
     std_stack_list = unify_input_file.std_flame_to_std_stack(lines)
     stack_director.start_play(std_stack_list, prefix, setting.PRIORITY_MODULE_LIST)
@@ -80,15 +81,19 @@ def chief_director():
     system_type = setting.SYSTEM_TYPE
     output_dir, prefix = base_utils.get_work_dir_and_prefix(output_dir, profiler_type)
     if profiler_type == 'umdh':
-        umdh_director(input_file, output_dir, prefix)
+        umdh_director(input_file, prefix)
     elif profiler_type == 'instrument':
-        instruments_director(output_dir, prefix, system_type)
+        instruments_director(prefix, system_type)
     elif profiler_type == 'std_stack':
-        unify_director(input_file, output_dir, prefix)
+        unify_director(input_file, prefix)
     elif profiler_type == 'wpt':
         wpt_director(output_dir, prefix)
     elif profiler_type == 'simple_perf':
-        simple_perf_director('', '', '', '', 10)
+        device_id = 'fc107f89'
+        ndk_path = '/Users/mjzheng/Library/Android/sdk/ndk/21.3.6528147'
+        app_name = 'com.tencent.wemeet.app'
+        sym_path = '/Users/mjzheng/Documents/meeting_android/app/app/Android/src/app/thirdparty/wmp/build/intermediates/merged_native_libs/debug/out/lib'
+        simple_perf_director(device_id, ndk_path, app_name, sym_path, 10)
 
 
 if __name__ == "__main__":

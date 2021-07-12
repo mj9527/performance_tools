@@ -45,7 +45,8 @@ def generate_graph(stack_collapse_list, prefix):
     stack_txt.get_txt_file(stack_collapse_list, txt_file)
 
     flame_file = prefix + "_flame.html"
-    stack_graph.get_flame_graph(json_file, flame_file)
+    std_json_file = prefix + '_std.json'
+    stack_graph.get_flame_graph(json_file, flame_file, std_json_file)
 
     sunburst_file = prefix + "_sunburst.html"
     stack_graph.get_sunburst_graph(json_file, sunburst_file)

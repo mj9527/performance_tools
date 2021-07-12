@@ -3,10 +3,12 @@ import json
 import os
 from drawtools.flamegraph_formatter import flame_formatting
 from drawtools.sunburst_formatter import sunburst_formatting
+import stack_json
 
 
-def get_flame_graph(file_name, html_file):
+def get_flame_graph(file_name, html_file, json_file):
     flame_json = flame_formatting(file_name)
+    stack_json.write_json_file(flame_json, json_file)
     s = json.dumps(flame_json, indent=2)
     a = s.replace('\r', '').replace('\n', '').replace(' ', '').replace('"', r'\"')
     with open(os.getcwd() + '/drawtools/flamegraph_template.html', 'r') as fr:

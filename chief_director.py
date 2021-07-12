@@ -1,3 +1,4 @@
+# coding=utf-8
 import setting
 import time
 import base_utils
@@ -31,7 +32,7 @@ def instruments_director(prefix, system_type):
     if ret != 0:
         return
 
-    print ('start parse content ', trace_file)
+    print 'start parse content ', trace_file
     time_file = content_parser.export_schema(trace_file, 'time-profile', prefix)
 
     # content_file = content_parser.export_content(trace_file, prefix)

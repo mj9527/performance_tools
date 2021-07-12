@@ -8,16 +8,16 @@ SYSTEM_OUTPUT_DIR = '/Users/mjzheng/Downloads/performance_data'
 
 SYSTEM_TYPE = 'ios'  #ios, mac, windows, linux
 
-PROFILER_TYPE = 'instrument'  # 'instrument', 'umdh', 'wpt', 'std_stack'
-PROFILER_SUB_TYPE = 'Time Profiler'
-
+PROFILER_TYPE = 'umdh'  # 'instrument', 'umdh', 'wpt', 'std_stack', 'simple_perf'
+#PROFILER_SUB_TYPE = 'Time Profiler'
+PROFILER_SUB_TYPE = 'Leaks'
 
 #memory setting
 #PROFILER_INPUT_FILE = '/Users/mjzheng/Documents/mj_git/performance_tools/sample/CPU_Usage_(Sampled)_Utilization_by_Process,_Thread,_Stack.csv'  # std_stack
-PROFILER_INPUT_FILE = '/Users/mjzheng/Documents/mj_git/performance_tools/sample/udmh_wemeet_sample.txt'
+PROFILER_INPUT_FILE = '/Users/mjzheng/Documents/mj_git/performance_tools/sample/udmh_sample.txt'
 
 # public
-RUN_TIME = 60  # 测试时间单位s
+RUN_TIME = 10  # 测试时间单位s
 
 SYMBOL_DIR = '/Users/mjzheng/Library/Developer/Xcode/DerivedData/WeMeetAppModules-fdaudevlzdviqxauhdkwveyajoft/Build/Products/Release-iphoneos/'
 SYMBOL_DICT = {

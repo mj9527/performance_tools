@@ -3,11 +3,10 @@ import json
 import subprocess
 
 
-def read_file_by_line(file_name, symbol_dir):
+def read_file_by_line(file_name, symbol_dir, arch):
     f = open(file_name)
     lines = []
     line = f.readline()
-    arch = 'armv7'
     while line:
         words = line.split(' ')
         #print(words[0], words[1], words[2], words[3].replace('\n', ''))
@@ -29,6 +28,8 @@ def write_json_file(json_data, file_name):
 
 
 if __name__ == "__main__":
-    FILE_NAME = '/Users/zhengjunming/Downloads/xcast.log'
+    FILE_NAME = '/Users/zhengjunming/Downloads/xcast_armv7_2.log'
     SYMBOL_DIR = '/Users/zhengjunming/Downloads/1.7.7/'
-    read_file_by_line(FILE_NAME, SYMBOL_DIR)
+    ARCH_NAME = 'armv7'
+    #ARCH_NAME = 'arm64'
+    read_file_by_line(FILE_NAME, SYMBOL_DIR, ARCH_NAME)

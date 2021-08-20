@@ -9,8 +9,8 @@ from umdh import record_umdh
 from instruments import record_apple
 from instruments import content_parser
 from instruments import time_profile_parser
-from windows import record_windows
-from windows import csv_file_parser
+from wpt import record_windows
+from wpt import csv_file_parser
 from simpleperf import analyze_cpu_usage
 
 

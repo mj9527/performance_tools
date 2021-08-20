@@ -10,7 +10,7 @@ def string_to_hex(data):
 
 
 def get_modules(inject_cmd, pid):
-    cmd = inject_cmd + str(pid) + ' -l ios_std/enumerate_modules.js'
+    cmd = inject_cmd + str(pid) + ' -l instruments/enumerate_modules.js'
     print (cmd)
     child = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     child.stdin.write('quit')
